@@ -15,3 +15,8 @@ docker run --name=teo -it --rm \
   --volume=/srv/docker/redmine/redmine:/home/redmine/data \
   teo:1.0
   
+  
+  Para Ansible Tower:
+  oc new-app https://github.com/hatsari/ansible-tower-rhel7-docker-image.git
+  
+  
