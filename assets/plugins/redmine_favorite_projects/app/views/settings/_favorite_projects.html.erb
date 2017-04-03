@@ -1,0 +1,59 @@
+<p>
+  <%= content_tag(:label, l(:label_default_favorite_behavior)) %>
+  <%= check_box_tag 'settings[default_favorite_behavior]', 1, @settings[:default_favorite_behavior] %>
+  <em class="info"><%= t(:default_favorite_behavior_info_html) %></em>
+</p>
+
+<p>
+  <%= content_tag(:label, l(:label_show_in_app_menu)) %>
+  <%= check_box_tag 'settings[show_in_app_menu]', 1, @settings[:show_in_app_menu] %>
+  <em class="info"><%= t(:show_in_app_menu_info) %></em>
+</p>
+
+<p>
+  <%= content_tag(:label, l(:label_project_name_view)) %>
+  <%= select_tag 'settings[project_name_view]', project_name_for_select(@settings[:project_name_view].to_s) %>
+  <em class="info"><%= t(:project_name_view_info) %></em>
+</p>
+
+<p>
+  <%= content_tag(:label, l(:label_show_project_desc)) %>
+  <%= check_box_tag 'settings[show_project_desc]', 1, @settings[:show_project_desc] %>
+  <em class="info"><%= l(:show_project_desc_info) %></em>
+</p>
+
+<p>
+  <%= content_tag(:label, l(:label_show_project_manager)) %>
+  <%= check_box_tag 'settings[show_project_manager]', 1, @settings[:show_project_manager] %>
+  <em class="info"><%= l(:show_project_manager_info) %></em>
+</p>
+
+<p>
+  <%= content_tag(:label, l(:label_project_manager_name)) %>
+  <%= select_tag 'settings[project_manager_name]', roles_for_select(@settings[:project_manager_name].to_s) %>
+  <em class="info"><%= t(:project_manager_name_info) %></em>
+</p>
+
+<p>
+  <%= content_tag(:label, l(:label_show_project_modules)) %>
+  <%= check_box_tag 'settings[show_project_modules]', 1, @settings[:show_project_modules] %>
+  <em class="info"><%= l(:show_project_modules_info) %></em>
+</p>
+
+<p>
+  <%= content_tag(:label, l(:label_show_project_progress)) %>
+  <%= check_box_tag 'settings[show_project_progress]', 1, @settings[:show_project_progress] %>
+  <em class="info"><%= l(:show_project_progress_info) %></em>
+</p>
+
+<p>
+  <%= content_tag(:label, l(:label_show_project_homepage)) %>
+  <%= check_box_tag 'settings[show_project_homepage]', 1, @settings[:show_project_homepage] %>
+  <em class="info"><%= l(:show_project_homepage_info) %></em>
+</p>
+
+<p>
+  <%= content_tag(:label, l(:label_show_project_created_on)) %>
+  <%= check_box_tag 'settings[show_project_created_on]', 1, @settings[:show_project_created_on] %>
+  <em class="info"><%= l(:show_project_created_on_info) %></em>
+</p>

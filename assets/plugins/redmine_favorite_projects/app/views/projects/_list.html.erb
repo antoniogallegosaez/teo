@@ -1,0 +1,69 @@
+<%
+
+   show_project_desc = Setting.plugin_redmine_favorite_projects['show_project_desc'].to_s
+   show_project_manager = Setting.plugin_redmine_favorite_projects['show_project_manager']
+   show_project_created_on = Setting.plugin_redmine_favorite_projects['show_project_created_on'].to_s
+   show_project_homepage = Setting.plugin_redmine_favorite_projects['show_project_homepage'].to_s
+   show_project_modules = Setting.plugin_redmine_favorite_projects['show_project_modules'].to_s
+   show_project_progress = Setting.plugin_redmine_favorite_projects['show_project_progress'].to_s
+   unless show_project_manager.nil? || show_project_manager==0
+     manager_name = Setting.plugin_redmine_favorite_projects['project_manager_name'].to_s
+   else
+     manager_name = ''
+   end
+%>
+<% if @projects.empty? %>
+    <p class="nodata"><%= l(:label_no_data) %></p>
+<% else %>
+
+    <p class="other-formats">
+      <%= link_to(l(:expand_all), "#", :onclick => 'expandAll()')%><span>&nbsp;/&nbsp;</span><%= link_to l(:collapse_all), "#", :onclick => 'collapseAll()' %>
+    </p>
+
+    <table class="list">
+      <thead><tr>
+        <th></th>
+        <th><%=l(:label_project)%></th>
+        <% unless show_project_desc.empty? %><th><%=l(:field_description)%></th><% end %>
+        <% unless manager_name.empty? %><th><%= manager_name.html_safe %></th><% end %>
+        <% unless show_project_modules.empty? %><th><%= l(:field_go_to)%></th><% end %>
+        <% unless show_project_progress.empty? %><th><%= l(:field_versions)%></th><% end %>
+        <% unless show_project_homepage.empty? %><th><%=l(:field_homepage)%></th><% end %>
+        <% unless show_project_created_on.empty? %><th><%= l(:field_created_on)%></th><% end %>
+      </tr></thead>
+      <tbody>
+      <% ancestors = [] %>
+      <% plevel = 0 %>
+      <% project_tree(@projects) do |project, level| %>
+          <% project_id = "%04d" % project.id %>
+          <% (plevel - level).times { ancestors.pop } if (level < plevel) %>
+          <% has_children = project.children.visible.any? %>
+          <tr id="<%= project_id %>" class="<%= favorite_css_classes(project, has_children) %> <%= level > 0 ? "hide #{ancestors.last}" : cycle("odd", "even") %>">
+            <td class="favorite"><%= favorite_tag(project, User.current) %></td>
+            <td class="name" style="padding-left: <%= (18 * level).to_s %>px">
+              <% if has_children %>
+                  <span class="expander" onclick="toggleShowHide(<%= "'#{project_id}'" %>)">&nbsp;</span>
+              <% end %>
+              <%= project_name(project) %>
+            </td>
+
+            <% unless show_project_desc.empty? %><td class="field"><%= textilizable(project.short_description).html_safe %></td><% end %>
+            <% unless manager_name.empty?%><td class="field"><%= project_manager_list(project) %></td><% end %>
+            <% unless show_project_modules.empty? %><td class="field"><%= table_view_modules_links(project) %></td><% end %>
+            <% unless show_project_progress.empty? %><td class="field"><%= table_view_progress(project) %></td><% end %>
+            <% unless show_project_homepage.empty? %><td class="field"><% unless project.homepage.blank? %>
+                <%= link_to h(project.homepage), project.homepage, {:class => 'external'} %>
+            <% end %></td><% end %>
+            <% unless show_project_created_on.empty? %><td><%= format_date(project.created_on) %></td><% end %>
+          </tr>
+          <% ancestors << project_id if has_children %>
+          <% plevel = level %>
+      <% end %>
+      </tbody>
+    </table>
+
+    <p class="other-formats">
+      <%= link_to(l(:expand_all), "#", :onclick => 'expandAll()')%><span>&nbsp;/&nbsp;</span><%= link_to l(:collapse_all), "#", :onclick => 'collapseAll()' %>
+    </p>
+
+<% end %>

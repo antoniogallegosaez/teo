@@ -1,0 +1,2 @@
+module TeoSetupSettingsHelper
+end

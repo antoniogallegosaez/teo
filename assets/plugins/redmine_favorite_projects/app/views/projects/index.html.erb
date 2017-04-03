@@ -1,0 +1,59 @@
+<% content_for :header_tags do %>
+    <%= javascript_include_tag 'table_view', :plugin => 'redmine_favorite_projects' %>
+    <%= stylesheet_link_tag 'table_view', :plugin => 'redmine_favorite_projects' %>
+    <%= auto_discovery_link_tag(:atom, {:action => 'index', :format => 'atom', :key => User.current.rss_key}) %>
+<% end %>
+
+<div class="contextual">
+  <%= render_project_action_links %>
+</div>
+
+<%= form_tag({:controller => "favorite_projects", :action => "search"}, :method => :get,  :id => "query_form") do %>
+  <% no_filters = (params[:closed].blank? && params[:project_search].blank?) %>
+
+<h2>
+  <%=l(:label_project_plural)%>
+
+        <span class="live_search">
+            <%= text_field_tag(:project_search, params[:project_search], :autocomplete => "off", :class => "live_search_field", :placeholder => l(:label_search) ) %>
+            <%= javascript_tag "observeSearchfield('project_search', 'null', '#{ escape_javascript(search_favorite_projects_path(:format => "js")) }')" %>
+        </span>
+</h2>
+
+<div class="filters">
+    <fieldset id="filters" class="collapsible <%= 'collapsed' if no_filters %>">
+      <legend onclick="toggleFieldset(this);"><%= l(:label_filter_plural) %></legend>
+      <div style="<%= 'display: none;' if no_filters %>">
+        <p>
+          <span class="filter-condition">
+            <label for="closed"><%= check_box_tag 'closed', 1, params[:closed] %> <%= l(:label_show_closed_projects) %></label>
+          </span>
+
+        </p>
+
+      </div>
+    </fieldset>
+    <p class="buttons hide-when-print">
+        <%= link_to l(:button_apply), "#", :onclick=>"$('#query_form').submit()", :class => 'icon icon-checked' %>
+        <%= link_to l(:button_clear), { :set_filter => 1, :project_id => @project }, :class => 'icon icon-reload'  %>
+    </p>
+</div>
+
+<% end %>
+<% cache project_index_cache_key do %>
+<div class="autoscroll" id="projects_list">
+  <%= render :partial => 'projects/list' %>
+</div>
+<% end %>
+
+<% if User.current.logged? %>
+<p class="other-formats">
+<span class="my-project"><%= l(:label_favorite_projects) %></span>
+</p>
+<% end %>
+
+<% other_formats_links do |f| %>
+	<%= f.link_to 'Atom', :url => {:key => User.current.rss_key} %>
+<% end %>
+
+<% html_title(l(:label_project_plural)) -%>

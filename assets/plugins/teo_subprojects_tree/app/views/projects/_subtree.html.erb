@@ -1,0 +1,53 @@
+<script type="text/javascript">
+  $(function(){
+    $("#projects-tree").fancytree({
+      extensions: ["persist"],
+      persist: {
+        expandLazy: true,
+        overrideSource: false,
+        store: "auto"
+      }
+    });
+
+    $( "a.collapse_projects").click(function(){
+      $("#projects-tree").fancytree("getRootNode").visit(function(node){
+        node.setExpanded(false);
+      });
+    });
+    $( "a.expand_projects").click(function(){
+      $("#projects-tree").fancytree("getRootNode").visit(function(node){
+        node.setExpanded(true);
+      });
+    });
+    $( "a.toggle_projects").click(function(){
+      $("#projects-tree").fancytree("getRootNode").visit(function(node){
+        node.toggleExpanded();
+      });
+    });
+
+  });
+</script>
+
+
+<% if @subprojects.any? %>
+  <style>
+div#subprojects h3 { background: url(../images/folder.png) no-repeat 0% 50%; padding-left: 20px;}
+  </style>
+
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'style_projects_tree', :plugin => 'teo_subprojects_tree' %>
+  <%= stylesheet_link_tag 'style_fancytree', :plugin => 'teo_subprojects_tree' %>
+  <%= javascript_include_tag 'jquery_fancytree_cookie', :plugin => 'teo_subprojects_tree' %>
+  <%= javascript_include_tag 'jquery_fancytree_min', :plugin => 'teo_subprojects_tree' %>
+  <%= javascript_include_tag 'jquery_fancytree_persist', :plugin => 'teo_subprojects_tree' %>
+<% end %>
+
+<div id="subprojects" class="box">
+<h3><%=l(:label_subproject_plural)%></h3>
+<div id="projects-tree">
+<%= render_subproject_hierarchy(@project) %>
+</div>
+<a class="expand_projects" href="#"><%= l(:expand_all) %></a> | <a class="collapse_projects" href="#"><%= l(:collapse_all) %></a><br />
+</div>
+
+<% end %>

@@ -1,0 +1,5 @@
+# English strings go here for Rails i18n
+en:
+  collapse_all: "Collapse all"
+  expand_all: "Expand all"
+  create_wiki_message: "Create a project wiki to have it shown here."

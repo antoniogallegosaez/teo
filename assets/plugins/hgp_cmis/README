@@ -1,0 +1,24 @@
+===============
+README hgp_cmis
+===============
+
+Ejecutar antes de la primera instalación del plugin:
+----------------------------------------------------
+
+* Intalar los paquetes libxml2-devel libxslt libxslt-devel
+  En CentOS/Redhat:
+  
+  # yum install libxml2-devel libxslt libxslt-devel
+  $ bundle install
+
+===================
+Configurar hgp_cmis
+===================
+
+ * Id del repositorio Cmis:
+
+   - Ir a: Administracion -> Navegador de nodos -> system://system 
+   - Copiar de la tabla Children: 
+     * Columna: "Child node"
+     * Fila:    "descriptor-current"
+     * Copiar a partir de "system://system"

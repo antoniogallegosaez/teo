@@ -1,0 +1,31 @@
+
+/* Project table view */
+
+tr.project td.name.manager {
+    padding-left: 3px!important;
+}
+
+#projects_list td.favorite {
+    width: 30px;
+    text-align: center;
+    vertical-align: middle;
+    padding: 0;
+}
+
+#projects_list td.field {
+    text-align: left!important;
+}
+
+#projects_list td.field {
+    text-align: left!important;
+}
+
+tr.parent { border: 1px solid #f8f8f8; }
+tr.parent td.name { white-space: nowrap;  width: 300px; }
+tr.child { border: 1px solid #f8f8f8; }
+tr.child td.name { white-space: nowrap;  width: 300px; }
+tr.leaf td.name a { margin-left: 16px; }
+tr.parent span.expander { background-image: url(../images/bullet_toggle_plus.png); padding-left: 8px; margin-left: 0; cursor: pointer; }
+span.empty { text-align:right; width: 100%; cursor: pointer; }
+tr.parent.open span.expander { background-image: url(../images/bullet_toggle_minus.png); cursor: pointer; }
+tr.hide { display:none; }
