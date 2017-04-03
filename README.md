@@ -8,7 +8,7 @@ With external database:
 
 docker run --name=teo -it --rm \
   --env='DB_ADAPTER=postgresql' \
-  --env='DB_HOST=192.168.1.100' \
+  --env='DB_HOST=192.168.42.228' \
   --env='DB_NAME=redmine_production' \
   --env='DB_USER=redmine' \
   --env='DB_PASS=password' \
