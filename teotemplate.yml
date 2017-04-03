@@ -1,0 +1,1019 @@
+apiVersion: v1
+kind: Template
+metadata:
+  creationTimestamp: null
+  name: teotemplate
+objects:
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: teo
+    name: teo
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: teo:latest
+    postCommit: {}
+    resources: {}
+    source:
+      git:
+        uri: https://github.com/jmnohales/teo.git
+      secrets: null
+      type: Git
+    strategy:
+      dockerStrategy:
+        from:
+          kind: ImageStreamTag
+          name: redmine:3.1.1-3
+      type: Docker
+    triggers:
+    - github:
+        secret: hjjkXgLOhOnB-igvzbio
+      type: GitHub
+    - generic:
+        secret: 4kuzfpGN8ogZdC7Dyl5e
+      type: Generic
+    - type: ConfigChange
+    - imageChange: {}
+      type: ImageChange
+  status:
+    lastVersion: 0
+- apiVersion: v1
+  kind: Build
+  metadata:
+    annotations:
+      openshift.io/build-config.name: teo
+      openshift.io/build.number: "1"
+      openshift.io/build.pod-name: teo-1-build
+    creationTimestamp: null
+    labels:
+      app: teo
+      buildconfig: teo
+      openshift.io/build-config.name: teo
+      openshift.io/build.start-policy: Serial
+    name: teo-1
+  spec:
+    output:
+      pushSecret:
+        name: builder-dockercfg-r0ac1
+      to:
+        kind: ImageStreamTag
+        name: teo:latest
+    postCommit: {}
+    resources: {}
+    revision:
+      git:
+        author:
+          email: jmnohales@gmail.com
+          name: jmnohales
+        commit: ab23134f2c3ec607e194d976d8a1b72a7f8211e5
+        committer:
+          email: noreply@github.com
+          name: GitHub
+        message: Update README.md
+      type: Git
+    serviceAccount: builder
+    source:
+      git:
+        uri: https://github.com/jmnohales/teo.git
+      secrets: null
+      type: Git
+    strategy:
+      dockerStrategy:
+        from:
+          kind: DockerImage
+          name: sameersbn/redmine@sha256:2efbe7f288c8efa6a6e29cbecf56a06e577bd3c6737ae9cda4bdc598b499c52b
+      type: Docker
+  status:
+    config:
+      name: teo
+    phase: New
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+      openshift.io/image.dockerRepositoryCheck: 2017-04-03T14:07:13Z
+    creationTimestamp: null
+    generation: 2
+    labels:
+      app: teo
+    name: redmine
+  spec:
+    tags:
+    - annotations:
+        openshift.io/imported-from: sameersbn/redmine:3.1.1-3
+      from:
+        kind: DockerImage
+        name: 172.30.68.11:5000/teo/redmine:3.1.1-3
+      generation: 2
+      importPolicy: {}
+      name: 3.1.1-3
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    generation: 1
+    labels:
+      app: teo
+    name: teo
+  spec:
+    tags:
+    - annotations: null
+      from:
+        kind: DockerImage
+        name: 172.30.68.11:5000/teo/teo:latest
+      generation: null
+      importPolicy: {}
+      name: latest
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    generation: 2
+    labels:
+      app: postgresql-ephemeral
+      template: postgresql-ephemeral-template
+    name: postgresql
+  spec:
+    replicas: 1
+    selector:
+      name: postgresql
+    strategy:
+      recreateParams:
+        timeoutSeconds: 600
+      resources: {}
+      type: Recreate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          name: postgresql
+      spec:
+        containers:
+        - env:
+          - name: POSTGRESQL_USER
+            value: redmine
+          - name: POSTGRESQL_PASSWORD
+            value: password
+          - name: POSTGRESQL_DATABASE
+            value: redmine_production
+          image: centos/postgresql-95-centos7@sha256:689345da8f0544e2603159e5bfa70becc9323c6a5c71e672d754ff7e894e3242
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 5432
+            timeoutSeconds: 1
+          name: postgresql
+          ports:
+          - containerPort: 5432
+            protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+              - /bin/sh
+              - -i
+              - -c
+              - psql -h 127.0.0.1 -U $POSTGRESQL_USER -q -d $POSTGRESQL_DATABASE -c
+                'SELECT 1'
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              memory: 512Mi
+          securityContext:
+            capabilities: {}
+            privileged: false
+          terminationMessagePath: /dev/termination-log
+          volumeMounts:
+          - mountPath: /var/lib/pgsql/data
+            name: postgresql-data
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: postgresql-data
+    test: false
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - postgresql
+        from:
+          kind: ImageStreamTag
+          name: postgresql:9.5
+          namespace: openshift
+      type: ImageChange
+    - type: ConfigChange
+  status: {}
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    generation: 8
+    labels:
+      app: teo
+    name: teo
+  spec:
+    replicas: 1
+    selector:
+      app: teo
+      deploymentconfig: teo
+    strategy:
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          openshift.io/container.teo.image.entrypoint: '["/sbin/entrypoint.sh","app:start"]'
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: teo
+          deploymentconfig: teo
+      spec:
+        containers:
+        - env:
+          - name: DB_ADAPTER
+            value: postgresql
+          - name: DB_HOST
+            value: 172.17.0.6
+          - name: DB_NAME
+            value: redmine_production
+          - name: DB_USER
+            value: redmine
+          - name: DB_PASS
+            value: password
+          image: 172.30.68.11:5000/teo/teo@sha256:8348e03d419f722938de9de7f73e317acdda512cb33fa81ab57242bd6e80425f
+          imagePullPolicy: Always
+          name: teo
+          ports:
+          - containerPort: 22
+            protocol: TCP
+          - containerPort: 80
+            protocol: TCP
+          - containerPort: 443
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          volumeMounts:
+          - mountPath: /var/log/redmine
+            name: teo-volume-1
+          - mountPath: /home/redmine/data
+            name: teo-volume-2
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: teo-volume-1
+        - emptyDir: {}
+          name: teo-volume-2
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - teo
+        from:
+          kind: ImageStreamTag
+          name: teo:latest
+          namespace: teo
+      type: ImageChange
+  status: {}
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    annotations:
+      openshift.io/deployer-pod.name: postgresql-1-deploy
+      openshift.io/deployment-config.latest-version: "1"
+      openshift.io/deployment-config.name: postgresql
+      openshift.io/deployment.phase: Complete
+      openshift.io/deployment.replicas: "1"
+      openshift.io/deployment.status-reason: image change
+      openshift.io/encoded-deployment-config: |
+        {"kind":"DeploymentConfig","apiVersion":"v1","metadata":{"name":"postgresql","namespace":"teo","selfLink":"/oapi/v1/namespaces/teo/deploymentconfigs/postgresql","uid":"632e1805-1870-11e7-b250-b6a8168af9f2","resourceVersion":"11130","generation":2,"creationTimestamp":"2017-04-03T13:21:03Z","labels":{"app":"postgresql-ephemeral","template":"postgresql-ephemeral-template"}},"spec":{"strategy":{"type":"Recreate","recreateParams":{"timeoutSeconds":600},"resources":{}},"triggers":[{"type":"ImageChange","imageChangeParams":{"automatic":true,"containerNames":["postgresql"],"from":{"kind":"ImageStreamTag","namespace":"openshift","name":"postgresql:9.5"},"lastTriggeredImage":"centos/postgresql-95-centos7@sha256:689345da8f0544e2603159e5bfa70becc9323c6a5c71e672d754ff7e894e3242"}},{"type":"ConfigChange"}],"replicas":1,"test":false,"selector":{"name":"postgresql"},"template":{"metadata":{"creationTimestamp":null,"labels":{"name":"postgresql"}},"spec":{"volumes":[{"name":"postgresql-data","emptyDir":{}}],"containers":[{"name":"postgresql","image":"centos/postgresql-95-centos7@sha256:689345da8f0544e2603159e5bfa70becc9323c6a5c71e672d754ff7e894e3242","ports":[{"containerPort":5432,"protocol":"TCP"}],"env":[{"name":"POSTGRESQL_USER","value":"redmine"},{"name":"POSTGRESQL_PASSWORD","value":"password"},{"name":"POSTGRESQL_DATABASE","value":"redmine_production"}],"resources":{"limits":{"memory":"512Mi"}},"volumeMounts":[{"name":"postgresql-data","mountPath":"/var/lib/pgsql/data"}],"livenessProbe":{"tcpSocket":{"port":5432},"initialDelaySeconds":30,"timeoutSeconds":1,"periodSeconds":10,"successThreshold":1,"failureThreshold":3},"readinessProbe":{"exec":{"command":["/bin/sh","-i","-c","psql -h 127.0.0.1 -U $POSTGRESQL_USER -q -d $POSTGRESQL_DATABASE -c 'SELECT 1'"]},"initialDelaySeconds":5,"timeoutSeconds":1,"periodSeconds":10,"successThreshold":1,"failureThreshold":3},"terminationMessagePath":"/dev/termination-log","imagePullPolicy":"IfNotPresent","securityContext":{"capabilities":{},"privileged":false}}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","securityContext":{}}}},"status":{"latestVersion":1,"observedGeneration":1,"details":{"message":"image change","causes":[{"type":"ImageChange","imageTrigger":{"from":{"kind":"ImageStreamTag","namespace":"openshift","name":"postgresql:9.5"}}}]},"conditions":[{"type":"Available","status":"False","lastTransitionTime":"2017-04-03T13:21:03Z","message":"Deployment config does not have minimum availability."}]}}
+    creationTimestamp: null
+    generation: 1
+    labels:
+      app: postgresql-ephemeral
+      openshift.io/deployment-config.name: postgresql
+      template: postgresql-ephemeral-template
+    name: postgresql-1
+  spec:
+    replicas: 1
+    selector:
+      deployment: postgresql-1
+      deploymentconfig: postgresql
+      name: postgresql
+    template:
+      metadata:
+        annotations:
+          openshift.io/deployment-config.latest-version: "1"
+          openshift.io/deployment-config.name: postgresql
+          openshift.io/deployment.name: postgresql-1
+        creationTimestamp: null
+        labels:
+          deployment: postgresql-1
+          deploymentconfig: postgresql
+          name: postgresql
+      spec:
+        containers:
+        - env:
+          - name: POSTGRESQL_USER
+            value: redmine
+          - name: POSTGRESQL_PASSWORD
+            value: password
+          - name: POSTGRESQL_DATABASE
+            value: redmine_production
+          image: centos/postgresql-95-centos7@sha256:689345da8f0544e2603159e5bfa70becc9323c6a5c71e672d754ff7e894e3242
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 5432
+            timeoutSeconds: 1
+          name: postgresql
+          ports:
+          - containerPort: 5432
+            protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+              - /bin/sh
+              - -i
+              - -c
+              - psql -h 127.0.0.1 -U $POSTGRESQL_USER -q -d $POSTGRESQL_DATABASE -c
+                'SELECT 1'
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              memory: 512Mi
+          securityContext:
+            capabilities: {}
+            privileged: false
+          terminationMessagePath: /dev/termination-log
+          volumeMounts:
+          - mountPath: /var/lib/pgsql/data
+            name: postgresql-data
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: postgresql-data
+  status:
+    replicas: 0
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/original-replicas: "1"
+      openshift.io/deployer-pod.name: teo-1-deploy
+      openshift.io/deployment-config.latest-version: "1"
+      openshift.io/deployment-config.name: teo
+      openshift.io/deployment.phase: Complete
+      openshift.io/deployment.replicas: "1"
+      openshift.io/deployment.status-reason: image change
+      openshift.io/encoded-deployment-config: |
+        {"kind":"DeploymentConfig","apiVersion":"v1","metadata":{"name":"teo","namespace":"teo","selfLink":"/oapi/v1/namespaces/teo/deploymentconfigs/teo","uid":"d520ae75-1876-11e7-b250-b6a8168af9f2","resourceVersion":"11817","generation":2,"creationTimestamp":"2017-04-03T14:07:11Z","labels":{"app":"teo"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"strategy":{"type":"Rolling","rollingParams":{"updatePeriodSeconds":1,"intervalSeconds":1,"timeoutSeconds":600,"maxUnavailable":"25%","maxSurge":"25%"},"resources":{}},"triggers":[{"type":"ConfigChange"},{"type":"ImageChange","imageChangeParams":{"automatic":true,"containerNames":["teo"],"from":{"kind":"ImageStreamTag","namespace":"teo","name":"teo:latest"},"lastTriggeredImage":"172.30.68.11:5000/teo/teo@sha256:8348e03d419f722938de9de7f73e317acdda512cb33fa81ab57242bd6e80425f"}}],"replicas":1,"test":false,"selector":{"app":"teo","deploymentconfig":"teo"},"template":{"metadata":{"creationTimestamp":null,"labels":{"app":"teo","deploymentconfig":"teo"},"annotations":{"openshift.io/container.teo.image.entrypoint":"[\"/sbin/entrypoint.sh\",\"app:start\"]","openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"volumes":[{"name":"teo-volume-1","emptyDir":{}},{"name":"teo-volume-2","emptyDir":{}}],"containers":[{"name":"teo","image":"172.30.68.11:5000/teo/teo@sha256:8348e03d419f722938de9de7f73e317acdda512cb33fa81ab57242bd6e80425f","ports":[{"containerPort":22,"protocol":"TCP"},{"containerPort":80,"protocol":"TCP"},{"containerPort":443,"protocol":"TCP"}],"resources":{},"volumeMounts":[{"name":"teo-volume-1","mountPath":"/var/log/redmine"},{"name":"teo-volume-2","mountPath":"/home/redmine/data"}],"terminationMessagePath":"/dev/termination-log","imagePullPolicy":"Always"}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","securityContext":{}}}},"status":{"latestVersion":1,"observedGeneration":1,"details":{"message":"image change","causes":[{"type":"ImageChange","imageTrigger":{"from":{"kind":"ImageStreamTag","namespace":"teo","name":"teo:latest"}}}]},"conditions":[{"type":"Available","status":"False","lastTransitionTime":"2017-04-03T14:07:11Z","message":"Deployment config does not have minimum availability."}]}}
+    creationTimestamp: null
+    generation: 1
+    labels:
+      app: teo
+      openshift.io/deployment-config.name: teo
+    name: teo-1
+  spec:
+    replicas: 0
+    selector:
+      app: teo
+      deployment: teo-1
+      deploymentconfig: teo
+    template:
+      metadata:
+        annotations:
+          openshift.io/container.teo.image.entrypoint: '["/sbin/entrypoint.sh","app:start"]'
+          openshift.io/deployment-config.latest-version: "1"
+          openshift.io/deployment-config.name: teo
+          openshift.io/deployment.name: teo-1
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: teo
+          deployment: teo-1
+          deploymentconfig: teo
+      spec:
+        containers:
+        - image: 172.30.68.11:5000/teo/teo@sha256:8348e03d419f722938de9de7f73e317acdda512cb33fa81ab57242bd6e80425f
+          imagePullPolicy: Always
+          name: teo
+          ports:
+          - containerPort: 22
+            protocol: TCP
+          - containerPort: 80
+            protocol: TCP
+          - containerPort: 443
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          volumeMounts:
+          - mountPath: /var/log/redmine
+            name: teo-volume-1
+          - mountPath: /home/redmine/data
+            name: teo-volume-2
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: teo-volume-1
+        - emptyDir: {}
+          name: teo-volume-2
+  status:
+    replicas: 0
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/original-replicas: "1"
+      openshift.io/deployer-pod.name: teo-2-deploy
+      openshift.io/deployment-config.latest-version: "2"
+      openshift.io/deployment-config.name: teo
+      openshift.io/deployment.phase: Complete
+      openshift.io/deployment.replicas: ""
+      openshift.io/deployment.status-reason: config change
+      openshift.io/encoded-deployment-config: |
+        {"kind":"DeploymentConfig","apiVersion":"v1","metadata":{"name":"teo","namespace":"teo","selfLink":"/oapi/v1/namespaces/teo/deploymentconfigs/teo","uid":"d520ae75-1876-11e7-b250-b6a8168af9f2","resourceVersion":"13039","generation":4,"creationTimestamp":"2017-04-03T14:07:11Z","labels":{"app":"teo"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"strategy":{"type":"Rolling","rollingParams":{"updatePeriodSeconds":1,"intervalSeconds":1,"timeoutSeconds":600,"maxUnavailable":"25%","maxSurge":"25%"},"resources":{}},"triggers":[{"type":"ConfigChange"},{"type":"ImageChange","imageChangeParams":{"automatic":true,"containerNames":["teo"],"from":{"kind":"ImageStreamTag","namespace":"teo","name":"teo:latest"},"lastTriggeredImage":"172.30.68.11:5000/teo/teo@sha256:8348e03d419f722938de9de7f73e317acdda512cb33fa81ab57242bd6e80425f"}}],"replicas":1,"test":false,"selector":{"app":"teo","deploymentconfig":"teo"},"template":{"metadata":{"creationTimestamp":null,"labels":{"app":"teo","deploymentconfig":"teo"},"annotations":{"openshift.io/container.teo.image.entrypoint":"[\"/sbin/entrypoint.sh\",\"app:start\"]","openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"volumes":[{"name":"teo-volume-1","emptyDir":{}},{"name":"teo-volume-2","emptyDir":{}}],"containers":[{"name":"teo","image":"172.30.68.11:5000/teo/teo@sha256:8348e03d419f722938de9de7f73e317acdda512cb33fa81ab57242bd6e80425f","ports":[{"containerPort":22,"protocol":"TCP"},{"containerPort":80,"protocol":"TCP"},{"containerPort":443,"protocol":"TCP"}],"env":[{"name":"DB_ADAPTER","value":"postgresql"},{"name":"DB_HOST","value":"192.168.42.228"},{"name":"DB_NAME","value":"redmine_production"},{"name":"DB_USER","value":"redmine"},{"name":"DB_PASS","value":"password"}],"resources":{},"volumeMounts":[{"name":"teo-volume-1","mountPath":"/var/log/redmine"},{"name":"teo-volume-2","mountPath":"/home/redmine/data"}],"terminationMessagePath":"/dev/termination-log","imagePullPolicy":"Always"}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","securityContext":{}}}},"status":{"latestVersion":2,"observedGeneration":3,"replicas":1,"updatedReplicas":1,"unavailableReplicas":1,"details":{"message":"config change","causes":[{"type":"ConfigChange"}]},"conditions":[{"type":"Progressing","status":"True","lastTransitionTime":"2017-04-03T14:11:02Z","reason":"NewReplicationControllerAvailable","message":"Replication controller \"teo-1\" has completed progressing"},{"type":"Available","status":"False","lastTransitionTime":"2017-04-03T14:51:58Z","message":"Deployment config does not have minimum availability."}]}}
+    creationTimestamp: null
+    generation: 1
+    labels:
+      app: teo
+      openshift.io/deployment-config.name: teo
+    name: teo-2
+  spec:
+    replicas: 0
+    selector:
+      app: teo
+      deployment: teo-2
+      deploymentconfig: teo
+    template:
+      metadata:
+        annotations:
+          openshift.io/container.teo.image.entrypoint: '["/sbin/entrypoint.sh","app:start"]'
+          openshift.io/deployment-config.latest-version: "2"
+          openshift.io/deployment-config.name: teo
+          openshift.io/deployment.name: teo-2
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: teo
+          deployment: teo-2
+          deploymentconfig: teo
+      spec:
+        containers:
+        - env:
+          - name: DB_ADAPTER
+            value: postgresql
+          - name: DB_HOST
+            value: 192.168.42.228
+          - name: DB_NAME
+            value: redmine_production
+          - name: DB_USER
+            value: redmine
+          - name: DB_PASS
+            value: password
+          image: 172.30.68.11:5000/teo/teo@sha256:8348e03d419f722938de9de7f73e317acdda512cb33fa81ab57242bd6e80425f
+          imagePullPolicy: Always
+          name: teo
+          ports:
+          - containerPort: 22
+            protocol: TCP
+          - containerPort: 80
+            protocol: TCP
+          - containerPort: 443
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          volumeMounts:
+          - mountPath: /var/log/redmine
+            name: teo-volume-1
+          - mountPath: /home/redmine/data
+            name: teo-volume-2
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: teo-volume-1
+        - emptyDir: {}
+          name: teo-volume-2
+  status:
+    replicas: 0
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/original-replicas: "1"
+      openshift.io/deployer-pod.name: teo-3-deploy
+      openshift.io/deployment-config.latest-version: "3"
+      openshift.io/deployment-config.name: teo
+      openshift.io/deployment.phase: Complete
+      openshift.io/deployment.replicas: ""
+      openshift.io/deployment.status-reason: config change
+      openshift.io/encoded-deployment-config: |
+        {"kind":"DeploymentConfig","apiVersion":"v1","metadata":{"name":"teo","namespace":"teo","selfLink":"/oapi/v1/namespaces/teo/deploymentconfigs/teo","uid":"d520ae75-1876-11e7-b250-b6a8168af9f2","resourceVersion":"13304","generation":6,"creationTimestamp":"2017-04-03T14:07:11Z","labels":{"app":"teo"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"strategy":{"type":"Rolling","rollingParams":{"updatePeriodSeconds":1,"intervalSeconds":1,"timeoutSeconds":600,"maxUnavailable":"25%","maxSurge":"25%"},"resources":{}},"triggers":[{"type":"ConfigChange"},{"type":"ImageChange","imageChangeParams":{"automatic":true,"containerNames":["teo"],"from":{"kind":"ImageStreamTag","namespace":"teo","name":"teo:latest"},"lastTriggeredImage":"172.30.68.11:5000/teo/teo@sha256:8348e03d419f722938de9de7f73e317acdda512cb33fa81ab57242bd6e80425f"}}],"replicas":1,"test":false,"selector":{"app":"teo","deploymentconfig":"teo"},"template":{"metadata":{"creationTimestamp":null,"labels":{"app":"teo","deploymentconfig":"teo"},"annotations":{"openshift.io/container.teo.image.entrypoint":"[\"/sbin/entrypoint.sh\",\"app:start\"]","openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"volumes":[{"name":"teo-volume-1","emptyDir":{}},{"name":"teo-volume-2","emptyDir":{}}],"containers":[{"name":"teo","image":"172.30.68.11:5000/teo/teo@sha256:8348e03d419f722938de9de7f73e317acdda512cb33fa81ab57242bd6e80425f","ports":[{"containerPort":22,"protocol":"TCP"},{"containerPort":80,"protocol":"TCP"},{"containerPort":443,"protocol":"TCP"}],"env":[{"name":"DB_ADAPTER","value":"postgresql"},{"name":"DB_HOST","value":"postgresql"},{"name":"DB_NAME","value":"redmine_production"},{"name":"DB_USER","value":"redmine"},{"name":"DB_PASS","value":"password"}],"resources":{},"volumeMounts":[{"name":"teo-volume-1","mountPath":"/var/log/redmine"},{"name":"teo-volume-2","mountPath":"/home/redmine/data"}],"terminationMessagePath":"/dev/termination-log","imagePullPolicy":"Always"}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","securityContext":{}}}},"status":{"latestVersion":3,"observedGeneration":5,"replicas":1,"updatedReplicas":1,"availableReplicas":1,"details":{"message":"config change","causes":[{"type":"ConfigChange"}]},"conditions":[{"type":"Progressing","status":"True","lastTransitionTime":"2017-04-03T14:53:13Z","reason":"NewReplicationControllerAvailable","message":"Replication controller \"teo-2\" has completed progressing"},{"type":"Available","status":"True","lastTransitionTime":"2017-04-03T15:02:04Z","message":"Deployment config has minimum availability."}]}}
+    creationTimestamp: null
+    generation: 1
+    labels:
+      app: teo
+      openshift.io/deployment-config.name: teo
+    name: teo-3
+  spec:
+    replicas: 0
+    selector:
+      app: teo
+      deployment: teo-3
+      deploymentconfig: teo
+    template:
+      metadata:
+        annotations:
+          openshift.io/container.teo.image.entrypoint: '["/sbin/entrypoint.sh","app:start"]'
+          openshift.io/deployment-config.latest-version: "3"
+          openshift.io/deployment-config.name: teo
+          openshift.io/deployment.name: teo-3
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: teo
+          deployment: teo-3
+          deploymentconfig: teo
+      spec:
+        containers:
+        - env:
+          - name: DB_ADAPTER
+            value: postgresql
+          - name: DB_HOST
+            value: postgresql
+          - name: DB_NAME
+            value: redmine_production
+          - name: DB_USER
+            value: redmine
+          - name: DB_PASS
+            value: password
+          image: 172.30.68.11:5000/teo/teo@sha256:8348e03d419f722938de9de7f73e317acdda512cb33fa81ab57242bd6e80425f
+          imagePullPolicy: Always
+          name: teo
+          ports:
+          - containerPort: 22
+            protocol: TCP
+          - containerPort: 80
+            protocol: TCP
+          - containerPort: 443
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          volumeMounts:
+          - mountPath: /var/log/redmine
+            name: teo-volume-1
+          - mountPath: /home/redmine/data
+            name: teo-volume-2
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: teo-volume-1
+        - emptyDir: {}
+          name: teo-volume-2
+  status:
+    replicas: 0
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    annotations:
+      openshift.io/deployer-pod.name: teo-4-deploy
+      openshift.io/deployment-config.latest-version: "4"
+      openshift.io/deployment-config.name: teo
+      openshift.io/deployment.phase: Complete
+      openshift.io/deployment.replicas: ""
+      openshift.io/deployment.status-reason: config change
+      openshift.io/encoded-deployment-config: |
+        {"kind":"DeploymentConfig","apiVersion":"v1","metadata":{"name":"teo","namespace":"teo","selfLink":"/oapi/v1/namespaces/teo/deploymentconfigs/teo","uid":"d520ae75-1876-11e7-b250-b6a8168af9f2","resourceVersion":"13373","generation":8,"creationTimestamp":"2017-04-03T14:07:11Z","labels":{"app":"teo"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"strategy":{"type":"Rolling","rollingParams":{"updatePeriodSeconds":1,"intervalSeconds":1,"timeoutSeconds":600,"maxUnavailable":"25%","maxSurge":"25%"},"resources":{}},"triggers":[{"type":"ConfigChange"},{"type":"ImageChange","imageChangeParams":{"automatic":true,"containerNames":["teo"],"from":{"kind":"ImageStreamTag","namespace":"teo","name":"teo:latest"},"lastTriggeredImage":"172.30.68.11:5000/teo/teo@sha256:8348e03d419f722938de9de7f73e317acdda512cb33fa81ab57242bd6e80425f"}}],"replicas":1,"test":false,"selector":{"app":"teo","deploymentconfig":"teo"},"template":{"metadata":{"creationTimestamp":null,"labels":{"app":"teo","deploymentconfig":"teo"},"annotations":{"openshift.io/container.teo.image.entrypoint":"[\"/sbin/entrypoint.sh\",\"app:start\"]","openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"volumes":[{"name":"teo-volume-1","emptyDir":{}},{"name":"teo-volume-2","emptyDir":{}}],"containers":[{"name":"teo","image":"172.30.68.11:5000/teo/teo@sha256:8348e03d419f722938de9de7f73e317acdda512cb33fa81ab57242bd6e80425f","ports":[{"containerPort":22,"protocol":"TCP"},{"containerPort":80,"protocol":"TCP"},{"containerPort":443,"protocol":"TCP"}],"env":[{"name":"DB_ADAPTER","value":"postgresql"},{"name":"DB_HOST","value":"172.17.0.6"},{"name":"DB_NAME","value":"redmine_production"},{"name":"DB_USER","value":"redmine"},{"name":"DB_PASS","value":"password"}],"resources":{},"volumeMounts":[{"name":"teo-volume-1","mountPath":"/var/log/redmine"},{"name":"teo-volume-2","mountPath":"/home/redmine/data"}],"terminationMessagePath":"/dev/termination-log","imagePullPolicy":"Always"}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","securityContext":{}}}},"status":{"latestVersion":4,"observedGeneration":7,"replicas":1,"updatedReplicas":1,"availableReplicas":1,"details":{"message":"config change","causes":[{"type":"ConfigChange"}]},"conditions":[{"type":"Available","status":"True","lastTransitionTime":"2017-04-03T15:02:04Z","message":"Deployment config has minimum availability."},{"type":"Progressing","status":"True","lastTransitionTime":"2017-04-03T15:02:44Z","reason":"NewReplicationControllerAvailable","message":"Replication controller \"teo-3\" has completed progressing"}]}}
+    creationTimestamp: null
+    generation: 1
+    labels:
+      app: teo
+      openshift.io/deployment-config.name: teo
+    name: teo-4
+  spec:
+    replicas: 1
+    selector:
+      app: teo
+      deployment: teo-4
+      deploymentconfig: teo
+    template:
+      metadata:
+        annotations:
+          openshift.io/container.teo.image.entrypoint: '["/sbin/entrypoint.sh","app:start"]'
+          openshift.io/deployment-config.latest-version: "4"
+          openshift.io/deployment-config.name: teo
+          openshift.io/deployment.name: teo-4
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: teo
+          deployment: teo-4
+          deploymentconfig: teo
+      spec:
+        containers:
+        - env:
+          - name: DB_ADAPTER
+            value: postgresql
+          - name: DB_HOST
+            value: 172.17.0.6
+          - name: DB_NAME
+            value: redmine_production
+          - name: DB_USER
+            value: redmine
+          - name: DB_PASS
+            value: password
+          image: 172.30.68.11:5000/teo/teo@sha256:8348e03d419f722938de9de7f73e317acdda512cb33fa81ab57242bd6e80425f
+          imagePullPolicy: Always
+          name: teo
+          ports:
+          - containerPort: 22
+            protocol: TCP
+          - containerPort: 80
+            protocol: TCP
+          - containerPort: 443
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          volumeMounts:
+          - mountPath: /var/log/redmine
+            name: teo-volume-1
+          - mountPath: /home/redmine/data
+            name: teo-volume-2
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: teo-volume-1
+        - emptyDir: {}
+          name: teo-volume-2
+  status:
+    replicas: 0
+- apiVersion: v1
+  kind: Route
+  metadata:
+    annotations:
+      openshift.io/host.generated: "true"
+    creationTimestamp: null
+    labels:
+      app: teo
+    name: teo
+  spec:
+    host: teo-teo.192.168.42.228.xip.io
+    port:
+      targetPort: 80-tcp
+    to:
+      kind: Service
+      name: teo
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: 2017-04-03T15:05:26Z
+        status: "True"
+        type: Admitted
+      host: teo-teo.192.168.42.228.xip.io
+      routerName: router
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: postgresql-ephemeral
+      template: postgresql-ephemeral-template
+    name: postgresql
+  spec:
+    ports:
+    - name: postgresql
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+    selector:
+      name: postgresql
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: teo
+    name: teo
+  spec:
+    ports:
+    - name: 22-tcp
+      port: 22
+      protocol: TCP
+      targetPort: 22
+    - name: 80-tcp
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    - name: 443-tcp
+      port: 443
+      protocol: TCP
+      targetPort: 443
+    selector:
+      app: teo
+      deploymentconfig: teo
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      kubernetes.io/created-by: |
+        {"kind":"SerializedReference","apiVersion":"v1","reference":{"kind":"ReplicationController","namespace":"teo","name":"postgresql-1","uid":"634253fb-1870-11e7-b250-b6a8168af9f2","apiVersion":"v1","resourceVersion":"11146"}}
+      openshift.io/deployment-config.latest-version: "1"
+      openshift.io/deployment-config.name: postgresql
+      openshift.io/deployment.name: postgresql-1
+      openshift.io/scc: anyuid
+    creationTimestamp: null
+    generateName: postgresql-1-
+    labels:
+      deployment: postgresql-1
+      deploymentconfig: postgresql
+      name: postgresql
+  spec:
+    containers:
+    - env:
+      - name: POSTGRESQL_USER
+        value: redmine
+      - name: POSTGRESQL_PASSWORD
+        value: password
+      - name: POSTGRESQL_DATABASE
+        value: redmine_production
+      image: centos/postgresql-95-centos7@sha256:689345da8f0544e2603159e5bfa70becc9323c6a5c71e672d754ff7e894e3242
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        failureThreshold: 3
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        successThreshold: 1
+        tcpSocket:
+          port: 5432
+        timeoutSeconds: 1
+      name: postgresql
+      ports:
+      - containerPort: 5432
+        protocol: TCP
+      readinessProbe:
+        exec:
+          command:
+          - /bin/sh
+          - -i
+          - -c
+          - psql -h 127.0.0.1 -U $POSTGRESQL_USER -q -d $POSTGRESQL_DATABASE -c 'SELECT
+            1'
+        failureThreshold: 3
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+      resources:
+        limits:
+          memory: 512Mi
+        requests:
+          memory: 512Mi
+      securityContext:
+        capabilities:
+          drop:
+          - MKNOD
+          - SYS_CHROOT
+        privileged: false
+        seLinuxOptions:
+          level: s0:c8,c7
+      terminationMessagePath: /dev/termination-log
+      volumeMounts:
+      - mountPath: /var/lib/pgsql/data
+        name: postgresql-data
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: default-token-srpv9
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    host: 192.168.42.228
+    imagePullSecrets:
+    - name: default-dockercfg-g3e07
+    nodeName: 192.168.42.228
+    restartPolicy: Always
+    securityContext:
+      seLinuxOptions:
+        level: s0:c8,c7
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    volumes:
+    - emptyDir: {}
+      name: postgresql-data
+    - name: default-token-srpv9
+      secret:
+        secretName: default-token-srpv9
+  status:
+    phase: Pending
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      openshift.io/build.name: teo-1
+      openshift.io/scc: privileged
+    creationTimestamp: null
+    labels:
+      openshift.io/build.name: teo-1
+    name: teo-1-build
+  spec:
+    containers:
+    - args:
+      - --loglevel=0
+      env:
+      - name: BUILD
+        value: |
+          {"kind":"Build","apiVersion":"v1","metadata":{"name":"teo-1","namespace":"teo","selfLink":"/oapi/v1/namespaces/teo/builds/teo-1","uid":"d5e55d5b-1876-11e7-b250-b6a8168af9f2","resourceVersion":"11754","creationTimestamp":"2017-04-03T14:07:13Z","labels":{"app":"teo","buildconfig":"teo","openshift.io/build-config.name":"teo","openshift.io/build.start-policy":"Serial"},"annotations":{"openshift.io/build-config.name":"teo","openshift.io/build.number":"1"}},"spec":{"serviceAccount":"builder","source":{"type":"Git","git":{"uri":"https://github.com/jmnohales/teo.git"}},"strategy":{"type":"Docker","dockerStrategy":{"from":{"kind":"DockerImage","name":"sameersbn/redmine@sha256:2efbe7f288c8efa6a6e29cbecf56a06e577bd3c6737ae9cda4bdc598b499c52b"}}},"output":{"to":{"kind":"DockerImage","name":"172.30.68.11:5000/teo/teo:latest"},"pushSecret":{"name":"builder-dockercfg-r0ac1"}},"resources":{},"postCommit":{},"nodeSelector":null,"triggeredBy":[{"message":"Image change","imageChangeBuild":{"imageID":"sameersbn/redmine@sha256:2efbe7f288c8efa6a6e29cbecf56a06e577bd3c6737ae9cda4bdc598b499c52b","fromRef":{"kind":"ImageStreamTag","name":"redmine:3.1.1-3"}}}]},"status":{"phase":"New","outputDockerImageReference":"172.30.68.11:5000/teo/teo:latest","config":{"kind":"BuildConfig","namespace":"teo","name":"teo"}}}
+      - name: SOURCE_REPOSITORY
+        value: https://github.com/jmnohales/teo.git
+      - name: SOURCE_URI
+        value: https://github.com/jmnohales/teo.git
+      - name: ORIGIN_VERSION
+        value: v1.4.1+3f9807a
+      - name: PUSH_DOCKERCFG_PATH
+        value: /var/run/secrets/openshift.io/push
+      image: openshift/origin-docker-builder:v1.4.1
+      imagePullPolicy: IfNotPresent
+      name: docker-build
+      resources: {}
+      securityContext:
+        privileged: true
+      terminationMessagePath: /dev/termination-log
+      volumeMounts:
+      - mountPath: /var/run/docker.sock
+        name: docker-socket
+      - mountPath: /var/run/secrets/openshift.io/push
+        name: builder-dockercfg-r0ac1-push
+        readOnly: true
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: builder-token-6nhnh
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    host: 192.168.42.228
+    imagePullSecrets:
+    - name: builder-dockercfg-r0ac1
+    nodeName: 192.168.42.228
+    restartPolicy: Never
+    securityContext: {}
+    serviceAccount: builder
+    serviceAccountName: builder
+    terminationGracePeriodSeconds: 30
+    volumes:
+    - hostPath:
+        path: /var/run/docker.sock
+      name: docker-socket
+    - name: builder-dockercfg-r0ac1-push
+      secret:
+        secretName: builder-dockercfg-r0ac1
+    - name: builder-token-6nhnh
+      secret:
+        secretName: builder-token-6nhnh
+  status:
+    phase: Pending
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      kubernetes.io/created-by: |
+        {"kind":"SerializedReference","apiVersion":"v1","reference":{"kind":"ReplicationController","namespace":"teo","name":"teo-4","uid":"a5ac0a6b-187e-11e7-815d-065721de3060","apiVersion":"v1","resourceVersion":"13394"}}
+      openshift.io/container.teo.image.entrypoint: '["/sbin/entrypoint.sh","app:start"]'
+      openshift.io/deployment-config.latest-version: "4"
+      openshift.io/deployment-config.name: teo
+      openshift.io/deployment.name: teo-4
+      openshift.io/generated-by: OpenShiftNewApp
+      openshift.io/scc: anyuid
+    creationTimestamp: null
+    generateName: teo-4-
+    labels:
+      app: teo
+      deployment: teo-4
+      deploymentconfig: teo
+  spec:
+    containers:
+    - env:
+      - name: DB_ADAPTER
+        value: postgresql
+      - name: DB_HOST
+        value: 172.17.0.6
+      - name: DB_NAME
+        value: redmine_production
+      - name: DB_USER
+        value: redmine
+      - name: DB_PASS
+        value: password
+      image: 172.30.68.11:5000/teo/teo@sha256:8348e03d419f722938de9de7f73e317acdda512cb33fa81ab57242bd6e80425f
+      imagePullPolicy: Always
+      name: teo
+      ports:
+      - containerPort: 22
+        protocol: TCP
+      - containerPort: 80
+        protocol: TCP
+      - containerPort: 443
+        protocol: TCP
+      resources: {}
+      securityContext:
+        capabilities:
+          drop:
+          - MKNOD
+          - SYS_CHROOT
+        privileged: false
+        seLinuxOptions:
+          level: s0:c8,c7
+      terminationMessagePath: /dev/termination-log
+      volumeMounts:
+      - mountPath: /var/log/redmine
+        name: teo-volume-1
+      - mountPath: /home/redmine/data
+        name: teo-volume-2
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: default-token-srpv9
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    host: 192.168.42.228
+    imagePullSecrets:
+    - name: default-dockercfg-g3e07
+    nodeName: 192.168.42.228
+    restartPolicy: Always
+    securityContext:
+      seLinuxOptions:
+        level: s0:c8,c7
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    volumes:
+    - emptyDir: {}
+      name: teo-volume-1
+    - emptyDir: {}
+      name: teo-volume-2
+    - name: default-token-srpv9
+      secret:
+        secretName: default-token-srpv9
+  status:
+    phase: Pending
