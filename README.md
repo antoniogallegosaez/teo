@@ -8,7 +8,7 @@ This is a TEO app (based in redmine) for deployment in Openshift demo.
 
 3.  $ minishift setup-cdk
 
-4.  $ minishift start --username <Red_Hat_username>  --password <Red_Hat_password>
+4.  $ minishift start --username <Red_Hat_username>  --password <Red_Hat_password>\n
 Starting local OpenShift cluster using 'kvm' hypervisor...
 Registering machine using subscription-manager
 Provisioning OpenShift via '/home/jmn/.minishift/cache/oc/v3.4.1.2/oc [cluster up --use-existing-config --host-config-dir /var/lib/minishift/openshift.local.config --host-data-dir /var/lib/minishift/hostdata --host-volumes-dir /var/lib/minishift/openshift.local.volumes]'
