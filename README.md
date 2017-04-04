@@ -30,16 +30,18 @@ Provisioning OpenShift via '/home/jmn/.minishift/cache/oc/v3.4.1.2/oc [cluster u
 5.  Open the GUI
     $ minishift console
 
-6.  Log in with user=admin pass=admin
+6.  Create a project called "teo"
+     $ oc login -u admin:admin<br />
+     $ oc new-project teo
 
-7.  Create a project called "teo" in the GUI
+7.  Build teo image from GitHub:<br />
+      $ oc new-build https://github.com/jmnohales/teo.git<br />
 
 8.  Change teo project privileges to be able to run containers as root:<br />
      $ oc login -u system:admin<br />
      $ oc adm policy add-scc-to-user anyuid -z default -n teo<br />
 
-9.  Build teo app from GitHub:<br />
-      $ oc new-app https://github.com/jmnohales/teo.git --strategy=docker<br />
+
 
 10. To Be Continued...
 
