@@ -48,10 +48,10 @@ Provisioning OpenShift via '/home/jmn/.minishift/cache/oc/v3.4.1.2/oc [cluster u
 
 <blockquote>
 ****     ANSIBLE ZONE   *****  
-8. Prepare posgreSQL database with ansible (needs an ansible environment with an inventary called "bbdd"):\
-<b>$ wget https://raw.githubusercontent.com/jmnohales/teo/master/postgresql_playbook.yml</b>\
-<b>$ ansible-playbook postgresql_playbook.yml</b>\
-**** END OF ANSIBLE ZONE ****\
+8. Prepare posgreSQL database with ansible (needs an ansible environment with an inventary called "bbdd"):<br/>
+<b>$ wget https://raw.githubusercontent.com/jmnohales/teo/master/postgresql_playbook.yml</b><br/>
+<b>$ ansible-playbook postgresql_playbook.yml</b><br/>
+**** END OF ANSIBLE ZONE ****<br/>
 </blockquote>
 
 9.  Open the GUI \
