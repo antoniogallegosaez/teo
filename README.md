@@ -44,8 +44,9 @@ Provisioning OpenShift via '/home/jmn/.minishift/cache/oc/v3.4.1.2/oc [cluster u
 [.... Wait until image teo be ready at the registry ...]
 
   
-9. Prepare posgreSQL database:
-        
+9. Prepare posgreSQL database with ansible (needs an ansible environment with an inventary called "bbdd"):
+     $ wget https://raw.githubusercontent.com/jmnohales/teo/master/postgresql_playbook.yml
+     $ ansible-playbook postgresql_playbook.yml
 
 10. Launch a teo instance from the GUI:
       - Select Project "teo"
