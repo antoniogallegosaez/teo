@@ -59,7 +59,9 @@ Provisioning OpenShift via '/home/jmn/.minishift/cache/oc/v3.4.1.2/oc [cluster u
           DB_HOST=<posgreSQL_server_IP> \
           DB_NAME=redmine_production \
           DB_USER=redmine \
-          DB_PASS=password \
+          DB_PASS=password
+          
+          
           
           
 
