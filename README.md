@@ -44,7 +44,7 @@ Provisioning OpenShift via '/home/jmn/.minishift/cache/oc/v3.4.1.2/oc [cluster u
 <b>$ oc login -u system:admin</b><br />
 <b>$ oc adm policy add-scc-to-user anyuid -z default -n teo</b><br />
 
-[.... Wait until image "teo" be ready at the registry ...]
+<i>[.... Wait until image "teo" be ready at the registry ...]</i>
 
 <blockquote>
 ****     ANSIBLE ZONE   *****  <br />
