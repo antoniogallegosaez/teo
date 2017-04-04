@@ -34,9 +34,9 @@ Provisioning OpenShift via '/home/jmn/.minishift/cache/oc/v3.4.1.2/oc [cluster u
 
 7.  Create a project called "teo" in the GUI
 
-8.  Change teo project privileges to be able to run containers as root:
-     $ oc login -u system:admin
-     $ oc adm policy add-scc-to-user anyuid -z default -n teo
+8.  Change teo project privileges to be able to run containers as root:<br />
+     $ oc login -u system:admin<br />
+     $ oc adm policy add-scc-to-user anyuid -z default -n teo<br />
 
 9.  Build teo app from GitHub:
       $ oc new-app https://github.com/jmnohales/teo.git --strategy=docker
