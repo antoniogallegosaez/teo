@@ -4,7 +4,7 @@ This is a TEO app (based in redmine) for deployment in Openshift demo.
 
 1. Download Openshift minishift cdk from: https://developers.redhat.com/products/cdk/download/
 
-2. # mv cdk-3.0.beta-minishift-linux-amd64 /bin/minishift
+2. \# mv cdk-3.0.beta-minishift-linux-amd64 /bin/minishift
 
 3. $ minishift setup-cdk
 
