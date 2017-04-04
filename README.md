@@ -65,6 +65,7 @@ Password: <i>admin</i><br />
       - Image Stream Tag:
           teo / teo / latest
       - Set the following variables:\
+          DB_TYPE = postgres \
           DB_ADAPTER = postgresql \
           DB_HOST = <posgreSQL_server_IP> \
           DB_NAME = redmine_production \
