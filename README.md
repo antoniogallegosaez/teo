@@ -34,7 +34,8 @@ Provisioning OpenShift via '/home/jmn/.minishift/cache/oc/v3.4.1.2/oc [cluster u
        oc login -u system:admin
 
 5.  Create a project called "teo"\
-<b>$ oc login -u admin:admin</b><br />
+<b>$ oc login -u admin</b><br />
+Password: <i>admin</i><br />
 <b>$ oc new-project teo</b>
 
 6.  Build teo image from GitHub:<br />
