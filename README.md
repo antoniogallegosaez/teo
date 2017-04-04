@@ -44,15 +44,15 @@ Provisioning OpenShift via '/home/jmn/.minishift/cache/oc/v3.4.1.2/oc [cluster u
 <b> $ oc new-build https://github.com/jmnohales/teo.git</b><br />
 
 8.  Change teo project privileges to be able to run containers as root:<br />
-     $ oc login -u system:admin<br />
-     $ oc adm policy add-scc-to-user anyuid -z default -n teo<br />
+<b>$ oc login -u system:admin</b><br />
+<b>$ oc adm policy add-scc-to-user anyuid -z default -n teo</b><br />
 
 [.... Wait until image teo be ready at the registry ...]
 
   
 9. Prepare posgreSQL database with ansible (needs an ansible environment with an inventary called "bbdd"):
-     $ wget https://raw.githubusercontent.com/jmnohales/teo/master/postgresql_playbook.yml
-     $ ansible-playbook postgresql_playbook.yml
+<b>$ wget https://raw.githubusercontent.com/jmnohales/teo/master/postgresql_playbook.yml</b>
+<b>$ ansible-playbook postgresql_playbook.yml</b>
 
 10. Launch a teo instance from the GUI:
       - Select Project "teo"
@@ -68,7 +68,3 @@ Provisioning OpenShift via '/home/jmn/.minishift/cache/oc/v3.4.1.2/oc [cluster u
           DB_PASS=password
           
           
-          
-          
-
-  
