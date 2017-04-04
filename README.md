@@ -52,6 +52,11 @@ Password: <i>admin</i><br />
 8. Prepare posgreSQL database with ansible (needs an ansible environment with an inventary called "bbdd"):<br/>
 <b>$ wget https://raw.githubusercontent.com/jmnohales/teo/master/postgresql_playbook.yml</b><br/>
 <b>$ ansible-playbook postgresql_playbook.yml</b><br/>
+
+To test database:
+<b>$ su - postgres</b><br/>
+<b>$ psql -U redmine --list</b><br/>
+
 **** END OF ANSIBLE ZONE ****<br/>
 </blockquote>
 
