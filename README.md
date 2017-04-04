@@ -36,7 +36,7 @@ Provisioning OpenShift via '/home/jmn/.minishift/cache/oc/v3.4.1.2/oc [cluster u
 5.  Open the GUI \
 <b>$ minishift console</b>
 
-6.  Create a project called "teo"
+6.  Create a project called "teo"\
 <b>$ oc login -u admin:admin</b><br />
 <b>$ oc new-project teo</b>
 
