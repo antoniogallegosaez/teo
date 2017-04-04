@@ -64,7 +64,7 @@ Password: <i>admin</i><br />
       - Select Tab "Deploy Image"
       - Image Stream Tag:
           teo / teo / latest
-      - Set the following variables:
+      - Set the following variables:\
           DB_ADAPTER=postgresql \
           DB_HOST=<posgreSQL_server_IP> \
           DB_NAME=redmine_production \
