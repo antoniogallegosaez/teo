@@ -41,21 +41,25 @@ Provisioning OpenShift via '/home/jmn/.minishift/cache/oc/v3.4.1.2/oc [cluster u
      $ oc login -u system:admin<br />
      $ oc adm policy add-scc-to-user anyuid -z default -n teo<br />
 
+[.... Wait until image teo be ready at the registry ...]
 
+  
+9. Prepare posgreSQL database:
+        
 
-10. To Be Continued...
+10. Launch a teo instance from the GUI:
+      - Select Project "teo"
+      - Select "Add to project in the middle of the menu bar"
+      - Select Tab "Deploy Image"
+      - Image Stream Tag:
+          teo / teo / latest
+      - Set the following variables:
+          DB_ADAPTER=postgresql \
+          DB_HOST=<posgreSQL_server_IP> \
+          DB_NAME=redmine_production \
+          DB_USER=redmine \
+          DB_PASS=password \
+          
+          
 
-Variables for external database:
-  --env='DB_ADAPTER=postgresql' \
-  --env='DB_HOST=192.168.42.228' \
-  --env='DB_NAME=redmine_production' \
-  --env='DB_USER=redmine' \
-  --env='DB_PASS=password' \
-  --volume=/srv/docker/redmine/redmine:/home/redmine/data \
-  teo:1.0
-  
-  
-  Para Ansible Tower:
-  oc new-app https://github.com/hatsari/ansible-tower-rhel7-docker-image.git
-  
   
