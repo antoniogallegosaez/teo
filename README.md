@@ -27,7 +27,7 @@ Provisioning OpenShift via '/home/jmn/.minishift/cache/oc/v3.4.1.2/oc [cluster u
    To login as administrator:
        oc login -u system:admin
 
-5.  Open the GUI
+5.  Open the GUI \
     $ minishift console
 
 6.  Create a project called "teo"
