@@ -3,12 +3,6 @@ kind: Build
 metadata:
   name: teo_bc
   namespace: teo
-  selfLink: /oapi/v1/namespaces/teo/builds/teo
-  labels:
-    app: teo
-    buildconfig: teo
-    openshift.io/build-config.name: teo
-    openshift.io/build.start-policy: Serial
 spec:
   serviceAccount: builder
   source:
@@ -19,8 +13,3 @@ spec:
     to:
       kind: ImageStreamTag
       name: 'teo:latest'
-status:
-  config:
-    kind: BuildConfig
-    namespace: teo
-    name: teo
