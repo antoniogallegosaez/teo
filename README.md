@@ -38,8 +38,8 @@ Provisioning OpenShift via '/home/jmn/.minishift/cache/oc/v3.4.1.2/oc [cluster u
      $ oc login -u system:admin<br />
      $ oc adm policy add-scc-to-user anyuid -z default -n teo<br />
 
-9.  Build teo app from GitHub:
-      $ oc new-app https://github.com/jmnohales/teo.git --strategy=docker
+9.  Build teo app from GitHub:<br />
+      $ oc new-app https://github.com/jmnohales/teo.git --strategy=docker<br />
 
 10. To Be Continued...
 
