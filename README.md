@@ -33,26 +33,28 @@ Provisioning OpenShift via '/home/jmn/.minishift/cache/oc/v3.4.1.2/oc [cluster u
    To login as administrator:
        oc login -u system:admin
 
-5.  Open the GUI \
-<b>$ minishift console</b>
-
-6.  Create a project called "teo"\
+5.  Create a project called "teo"\
 <b>$ oc login -u admin:admin</b><br />
 <b>$ oc new-project teo</b>
 
-7.  Build teo image from GitHub:<br />
+6.  Build teo image from GitHub:<br />
 <b> $ oc new-build https://github.com/jmnohales/teo.git</b><br />
 
-8.  Change teo project privileges to be able to run containers as root:<br />
+7.  Change teo project privileges to be able to run containers as root:<br />
 <b>$ oc login -u system:admin</b><br />
 <b>$ oc adm policy add-scc-to-user anyuid -z default -n teo</b><br />
 
 [.... Wait until image "teo" be ready at the registry ...]
 
-  
-9. Prepare posgreSQL database with ansible (needs an ansible environment with an inventary called "bbdd"):\
+****     ANSIBLE ZONE   *****  
+8. Prepare posgreSQL database with ansible (needs an ansible environment with an inventary called "bbdd"):\
 <b>$ wget https://raw.githubusercontent.com/jmnohales/teo/master/postgresql_playbook.yml</b>\
 <b>$ ansible-playbook postgresql_playbook.yml</b>
+**** END OF ANSIBLE ZONE ****
+
+
+9.  Open the GUI \
+<b>$ minishift console</b>
 
 10. Launch a teo instance from the GUI:
       - Select Project "teo"
