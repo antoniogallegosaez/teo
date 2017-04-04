@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Build
+metadata:
+  name: teo-1
+  namespace: teo
+  selfLink: /oapi/v1/namespaces/teo/builds/teo
+  labels:
+    app: teo
+    buildconfig: teo
+    openshift.io/build-config.name: teo
+    openshift.io/build.start-policy: Serial
+spec:
+  serviceAccount: builder
+  source:
+    type: Git
+    git:
+      uri: 'https://github.com/jmnohales/teo.git'
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'teo:latest'
+status:
+  config:
+    kind: BuildConfig
+    namespace: teo
+    name: teo
