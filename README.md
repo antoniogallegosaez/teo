@@ -4,9 +4,9 @@ This is a TEO app (based in redmine) for deployment in Openshift demo.
 
 1.  Download Openshift minishift cdk from: https://developers.redhat.com/products/cdk/download/
 
-2.   \# mv cdk-3.0.beta-minishift-linux-amd64 /bin/minishift
+2.   <b>\# mv cdk-3.0.beta-minishift-linux-amd64 /bin/minishift</b>
 
-3.  $ minishift setup-cdk
+3.  <b>$ minishift setup-cdk</b>\
     Copying minishift-rhel7.iso to '/home/jmn/.minishift/cache/iso/minishift-rhel7.iso'\
     Copying oc to '/home/jmn/.minishift/cache/oc/v3.4.1.2/oc'\
     Creating configuration file '/home/jmn/.minishift/config/config.json'\
@@ -14,7 +14,7 @@ This is a TEO app (based in redmine) for deployment in Openshift demo.
     CDK 3 setup complete.
 
 
-4.  $ minishift start --username <Red_Hat_username>  --password <Red_Hat_password> <br />
+4.  <b>$ minishift start --username <Red_Hat_username>  --password <Red_Hat_password></b> <br />
 Starting local OpenShift cluster using 'kvm' hypervisor...<br />
 Registering machine using subscription-manager<br />
 Provisioning OpenShift via '/home/jmn/.minishift/cache/oc/v3.4.1.2/oc [cluster up --use-existing-config --host-config-dir /var/lib/minishift/openshift.local.config --host-data-dir /var/lib/minishift/hostdata --host-volumes-dir /var/lib/minishift/openshift.local.volumes]'<br />
@@ -34,14 +34,14 @@ Provisioning OpenShift via '/home/jmn/.minishift/cache/oc/v3.4.1.2/oc [cluster u
        oc login -u system:admin
 
 5.  Open the GUI \
-    $ minishift console
+<b>$ minishift console</b>
 
 6.  Create a project called "teo"
-     $ oc login -u admin:admin<br />
-     $ oc new-project teo
+<b>$ oc login -u admin:admin</b><br />
+<b>$ oc new-project teo</b>
 
 7.  Build teo image from GitHub:<br />
-      $ oc new-build https://github.com/jmnohales/teo.git<br />
+<b> $ oc new-build https://github.com/jmnohales/teo.git</b><br />
 
 8.  Change teo project privileges to be able to run containers as root:<br />
      $ oc login -u system:admin<br />
