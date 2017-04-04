@@ -1,5 +1,6 @@
 ---
 - name: Install Postgres Server
+  user: root
   hosts: bbdd
   vars:
      pguser: postgres
