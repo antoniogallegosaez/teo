@@ -21,11 +21,9 @@ Provisioning OpenShift via '/home/jmn/.minishift/cache/oc/v3.4.1.2/oc [cluster u
    OpenShift server started.<br />
    The server is accessible via web console at:<br />
        https://192.168.42.110:8443<br />
-<br />
    You are logged in as:<br />
        User:     developer<br />
        Password: developer<br />
-<br />
    To login as administrator:
        oc login -u system:admin
 
