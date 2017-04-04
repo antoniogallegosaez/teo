@@ -7,6 +7,12 @@ This is a TEO app (based in redmine) for deployment in Openshift demo.
 2.   \# mv cdk-3.0.beta-minishift-linux-amd64 /bin/minishift
 
 3.  $ minishift setup-cdk
+    Copying minishift-rhel7.iso to '/home/jmn/.minishift/cache/iso/minishift-rhel7.iso'\
+    Copying oc to '/home/jmn/.minishift/cache/oc/v3.4.1.2/oc'\
+    Creating configuration file '/home/jmn/.minishift/config/config.json'\
+    Creating marker file '/home/jmn/.minishift/cdk'\
+    CDK 3 setup complete.
+
 
 4.  $ minishift start --username <Red_Hat_username>  --password <Red_Hat_password> <br />
 Starting local OpenShift cluster using 'kvm' hypervisor...<br />
