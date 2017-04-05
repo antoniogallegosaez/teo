@@ -37,8 +37,6 @@ TEO is a customized redmine. This is a TEO deployment example for Openshift.
 <pre>    $ oc login -u system:admin
     $ oc adm policy add-scc-to-user anyuid -z default -n <i>project_name</i></pre>
 
-<i>&emsp; [.... Wait until image "teo" be ready at the registry ...]</i>
-
 <blockquote>
 ****     ANSIBLE ZONE   *****  <br />
 <br />
@@ -57,6 +55,7 @@ To test postgresql database:<br />
 **** END OF ANSIBLE ZONE ****<br/>
 </blockquote>
 
+<i>&emsp; [.... Wait until image "teo" be ready at the registry before continue ...]</i>
 
 7. Launch a teo template instance from the GUI:
       - Open Openshift GUI
