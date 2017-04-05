@@ -45,7 +45,8 @@ Password: <i>admin</i><br />
 
 7.  Change teo project privileges to be able to run containers as root:<br />
 <b>$ oc login -u system:admin</b><br />
-<b>$ oc adm policy add-scc-to-user anyuid -z default -n teo</b><br />
+<b>$ oc project teo</b><br />
+<b>$ oc adm policy add-scc-to-user anyuid -z default</b><br />
 
 <i>[.... Wait until image "teo" be ready at the registry ...]</i>
 
