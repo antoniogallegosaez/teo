@@ -1,24 +1,19 @@
 apiVersion: v1
 kind: Template
 metadata:
-  creationTimestamp: null
-  name: teo
+  name: ${NAME}
 objects:
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
-    annotations:
-      openshift.io/generated-by: OpenShiftWebConsole
-    creationTimestamp: null
-    generation: 2
     labels:
-      app: teo
-    name: teo
+      app: ${NAME}
+    name: ${NAME}
   spec:
     replicas: 1
     selector:
-      app: teo
-      deploymentconfig: teo
+      app: ${NAME}
+      deploymentconfig: ${NAME}
     strategy:
       resources: {}
       rollingParams:
@@ -30,12 +25,9 @@ objects:
       type: Rolling
     template:
       metadata:
-        annotations:
-          openshift.io/generated-by: OpenShiftWebConsole
-        creationTimestamp: null
         labels:
-          app: teo
-          deploymentconfig: teo
+          app: ${NAME}
+          deploymentconfig: ${NAME}
       spec:
         containers:
         - env:
@@ -51,9 +43,9 @@ objects:
             value: redmine
           - name: DB_PASS
             value: password
-          image: 172.30.1.1:5000/teo/teo@sha256:29cdade6b9ff5ea1d01cf7b2d02e84e94ff57192492bf60def90b643b1b80e2d
+          image: teo/teo
           imagePullPolicy: Always
-          name: teo
+          name: ${NAME}
           ports:
           - containerPort: 22
             protocol: TCP
@@ -83,7 +75,7 @@ objects:
     - imageChangeParams:
         automatic: true
         containerNames:
-        - teo
+        - ${NAME}
         from:
           kind: ImageStreamTag
           name: teo:latest
@@ -93,12 +85,9 @@ objects:
 - apiVersion: v1
   kind: Service
   metadata:
-    annotations:
-      openshift.io/generated-by: OpenShiftWebConsole
-    creationTimestamp: null
     labels:
-      app: teo
-    name: teo
+      app: ${NAME}
+    name: ${NAME}
   spec:
     ports:
     - name: 22-tcp
@@ -114,32 +103,23 @@ objects:
       protocol: TCP
       targetPort: 443
     selector:
-      deploymentconfig: teo
+      deploymentconfig: ${NAME}
     sessionAffinity: None
     type: ClusterIP
-  status:
-    loadBalancer: {}
 - apiVersion: v1
   kind: Route
   metadata:
-    annotations:
-      openshift.io/host.generated: "true"
-    creationTimestamp: null
     labels:
-      app: teo
-    name: teo
+      app: ${NAME}
+    name: ${NAME}
   spec:
-    host: teo-teo.192.168.42.36.xip.io
+    host: ${APPLICATION_DOMAIN}
     port:
       targetPort: 80-tcp
     to:
       kind: Service
-      name: teo
-  status:
-    ingress:
-    - conditions:
-      - lastTransitionTime: 2017-04-05T10:20:21Z
-        status: "True"
-        type: Admitted
-      host: teo-teo.192.168.42.36.xip.io
-      routerName: router
+      name: ${NAME}
+parameters:
+- description: Name of the instance
+  name: NAME
+  value: teo
