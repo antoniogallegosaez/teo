@@ -49,7 +49,7 @@ Password: <i>admin</i><br />
      &emsp;  - Ensure /etc/ansible/hosts has the correct IP associated to "bbdd"<br/>
      &emsp;  - Allow access to postgreSQL host from Ansible:<br/>
      &emsp; <b> $ ssh-copy-id root@'<i>IP_postgreSQL_server</i>' </b> <br/>
-   Then launch Ansible Playbook to install and configure PostgreSQL:
+   Then launch Ansible Playbook to install and configure PostgreSQL:<br />
 <b>$ wget https://raw.githubusercontent.com/jmnohales/teo/master/postgresql_playbook.yml</b><br/>
 <b>$ ansible-playbook postgresql_playbook.yml</b><br/>
 
