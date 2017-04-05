@@ -18,7 +18,7 @@ TEO is a customized redmine. This is a TEO deployment example for Openshift.
     Starting local OpenShift cluster using 'kvm' hypervisor...
     [...]
     To login as administrator:
-    oc login -u system:admin </pre>
+        oc login -u system:admin </pre>
 
 2.  Create a project called "teo"\
 <b>$ oc login -u admin</b><br />
