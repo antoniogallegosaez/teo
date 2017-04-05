@@ -37,10 +37,11 @@
        line="listen_addresses = '0.0.0.0'"
        state=present
      notify: restart postgresql
-
-   - lineinfile: dest=/var/lib/pgsql/data/pg_hba.conf
-                 regexp='host\s+all\s+all\s+all\s+md5'
-                 line='host all all 127.0.0.1/32 md5'
+     
+   - name: Ensure PostgreSQL allow connection from remote clients
+     lineinfile: dest=/var/lib/pgsql/data/pg_hba.conf
+                 regexp='host\s+all\s+all\s+127.0.0.1/32'
+                 line='host\tall\tall\tall\tmd5'
                  insertbefore=BOF
      notify: restart postgresql
 
