@@ -61,7 +61,7 @@ objects:
           - mountPath: /var/log/redmine
             name: teo-2
           readinessProbe:
-           httpGet:
+            httpGet:
               path: /
               port: 80
               scheme: HTTP
