@@ -124,7 +124,7 @@ parameters:
   value: teo
 - description: Service, Hostname or PostgreSQL server IP address
   name: DB_HOST
-  value: postgresteo
+  value: 172.30.122.67
 - description: Database Name
   name: DB_NAME
   value: redmine_production
