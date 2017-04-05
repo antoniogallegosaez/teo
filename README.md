@@ -1,6 +1,6 @@
-# teo
+# Demo TEO
 
-This is a TEO app (based in redmine) for deployment in Openshift demo.
+This is a TEO app (based in redmine) deployment example for Openshift.
 
 1.  Download Openshift minishift cdk from: https://developers.redhat.com/products/cdk/download/
 
