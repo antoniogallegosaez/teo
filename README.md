@@ -54,6 +54,9 @@ Password: <i>admin</i><br />
 ****     ANSIBLE ZONE   *****  <br />
 8. Prepare posgreSQL database with ansible (needs an ansible environment with an inventary called "bbdd"):<br/>
 <b>$ wget https://raw.githubusercontent.com/jmnohales/teo/master/postgresql_playbook.yml</b><br/>
+    Ensure /etc/ansible/hosts has the correct IP associated to "bbdd"\
+    Allow access to host from Ansible:\
+    ssh-copy-id root@<IP_postgreSQL_server>\
 <b>$ ansible-playbook postgresql_playbook.yml</b><br/>
 
 To test database:
