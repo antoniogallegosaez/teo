@@ -2,9 +2,10 @@
 
 TEO is a customized redmine. This is a TEO deployment example for Openshift.
 
-<blockquote> <i>Note: Steps 1 to 4 create an Openshift demo environment, if you already have an operational Openshift environment, you can start from step 5.</i> </blockquote>
+<blockquote> <i>Note: step 1 prepares an Openshift demo environment, if you already have an operational Openshift environment, you can start from step 2.</i> </blockquote>
 
-1.  Download & configure Openshift minishift CDK (https://developers.redhat.com/products/cdk/download/)
+1.  Prepare Openshift environment. <br />
+    For demo purposes you can use Openshift CDK (https://developers.redhat.com/products/cdk/download/)
 
 <pre>    $ wget https://developers.redhat.com/download-manager/file/cdk-3.0.beta-minishift-linux-amd64
     # mv cdk-3.0.beta-minishift-linux-amd64 /bin/minishift
@@ -13,27 +14,27 @@ TEO is a customized redmine. This is a TEO deployment example for Openshift.
     [...]
     CDK 3 setup complete.
     
-    $ minishift start --username <Red_Hat_username>  --password <Red_Hat_password> 
+    $ minishift start --username <i>Red_Hat_username</i>  --password <i>Red_Hat_password</i> 
     Starting local OpenShift cluster using 'kvm' hypervisor...
     [...]
     To login as administrator:
     oc login -u system:admin </pre>
 
-5.  Create a project called "teo"\
+2.  Create a project called "teo"\
 <b>$ oc login -u admin</b><br />
 Password: <i>admin</i><br />
 <b>$ oc new-project teo</b>
 
-6.  Build teo image from GitHub:<br />
+3.  Build teo image from GitHub:<br />
 <b> $ oc new-build https://github.com/jmnohales/teo.git</b><br />
     <i>(optional) It is possible to monitor the process from GUI\
     <b> $ minishift console</b></i><br /> 
 
-7.  Import TEO app tempate:<br />
+4.  Import TEO app tempate:<br />
 <b> $ oc create -f https://raw.githubusercontent.com/jmnohales/teo/master/teo_template.yml</b><br />
 
 
-8.  Change teo project privileges to be able to run containers as root:<br />
+5.  Change teo project privileges to be able to run containers as root:<br />
 <b>$ oc login -u system:admin</b><br />
 <b>$ oc project teo</b><br />
 <b>$ oc adm policy add-scc-to-user anyuid -z default</b><br />
@@ -43,7 +44,7 @@ Password: <i>admin</i><br />
 <blockquote>
 ****     ANSIBLE ZONE   *****  <br />
 <br />
-9. Prepare posgreSQL database with ansible. We tested it with a Minimal installation of CentOS 7.<br />
+6. Prepare posgreSQL database with ansible. We tested it with a Minimal installation of CentOS 7.<br />
      Prior to launch the playbook:<br />
      &emsp;  - Ensure /etc/ansible/hosts has the correct IP associated to "bbdd"<br/>
      &emsp;  - Allow access to postgreSQL host from Ansible:<br/>
@@ -58,10 +59,9 @@ To test postgresql database:<br />
 **** END OF ANSIBLE ZONE ****<br/>
 </blockquote>
 
-9.  Open the GUI \
-<b>$ minishift console</b>
 
-10. Launch a teo template instance from the GUI:
+7. Launch a teo template instance from the GUI:
+      - Open Openshift GUI
       - Select Project "teo"
       - Select "Add to project in the middle of the menu bar"
       - Look for "template-teo"
