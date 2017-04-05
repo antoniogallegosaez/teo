@@ -36,13 +36,13 @@ objects:
           - name: DB_ADAPTER
             value: postgresql
           - name: DB_HOST
-            value: postgreteo
+            value: ${DB_HOST}
           - name: DB_NAME
-            value: redmine_production
+            value: ${DB_NAME}
           - name: DB_USER
-            value: redmine
+            value: ${DB_USER}
           - name: DB_PASS
-            value: password
+            value: ${DB_PASS}
           image: teo/teo
           imagePullPolicy: Always
           name: ${NAME}
