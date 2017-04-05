@@ -43,12 +43,12 @@ TEO is a customized redmine. This is a TEO deployment example for Openshift.
      Prior to launch the playbook:<br />
      &emsp;  - Ensure /etc/ansible/hosts has the correct IP associated to "bbdd"<br/>
      &emsp;  - Allow access to postgreSQL host from Ansible:<br/>
-     <pre>&emsp; $ ssh-copy-id root@'<i>IP_postgreSQL_server</i>' </pre>
+     <pre>&emsp; $ ssh-copy-id root@<i>postgres_server_IP</i> </pre>
    Then launch Ansible Playbook to install and configure PostgreSQL:<br />
 <pre>  $ wget https://raw.githubusercontent.com/jmnohales/teo/master/postgresql_playbook.yml
   $ ansible-playbook postgresql_playbook.yml</pre>
 To test postgresql database:
-<pre>  $ psql -h <i>postgre_server_IP</i> -U redmine --list</pre>
+<pre>  $ psql -h <i>postgres_server_IP</i> -U redmine --list</pre>
 ------ END OF ANSIBLE ZONE ------<br/>
 </blockquote>
 
