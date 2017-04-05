@@ -46,9 +46,9 @@ Password: <i>admin</i><br />
 9. Prepare posgreSQL database with ansible (needs an ansible environment with an inventary called "bbdd"):<br/>
      We tested it with a Minimal installation of CentOS 7.<br />
      Prior to launch the playbook:<br />
-       - Ensure /etc/ansible/hosts has the correct IP associated to "bbdd"<br/>
-       - Allow access to postgreSQL host from Ansible:<br/>
-    <b> $ ssh-copy-id root@'<i>IP_postgreSQL_server</i>' </b> <br/>
+     &emsp;  - Ensure /etc/ansible/hosts has the correct IP associated to "bbdd"<br/>
+     &emsp;  - Allow access to postgreSQL host from Ansible:<br/>
+     &emsp; <b> $ ssh-copy-id root@'<i>IP_postgreSQL_server</i>' </b> <br/>
    Then launch Ansible Playbook to install and configure PostgreSQL:
 <b>$ wget https://raw.githubusercontent.com/jmnohales/teo/master/postgresql_playbook.yml</b><br/>
 <b>$ ansible-playbook postgresql_playbook.yml</b><br/>
