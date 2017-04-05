@@ -6,9 +6,9 @@ TEO is a customized redmine. This is a TEO deployment example for Openshift.
 
 1.  Download Openshift minishift cdk from: https://developers.redhat.com/products/cdk/download/
 
-2.   <b>&#35; mv cdk-3.0.beta-minishift-linux-amd64 /bin/minishift</b>
+2.   <pre> # mv cdk-3.0.beta-minishift-linux-amd64 /bin/minishift</pre>
 
-3.  <b>$ minishift setup-cdk</b>\
+3.  <pre> $ minishift setup-cdk </pre>
     Copying minishift-rhel7.iso to '/home/jmn/.minishift/cache/iso/minishift-rhel7.iso'\
     Copying oc to '/home/jmn/.minishift/cache/oc/v3.4.1.2/oc'\
     Creating configuration file '/home/jmn/.minishift/config/config.json'\
@@ -16,7 +16,7 @@ TEO is a customized redmine. This is a TEO deployment example for Openshift.
     CDK 3 setup complete.
 
 
-4.  <b>$ minishift start --username <Red_Hat_username>  --password <Red_Hat_password></b> <br />
+4.  <pre> $ minishift start --username <Red_Hat_username>  --password <Red_Hat_password> </pre> 
 Starting local OpenShift cluster using 'kvm' hypervisor...<br />
 [...]<br />
    To login as administrator:<br />
