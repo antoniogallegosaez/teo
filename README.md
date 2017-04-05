@@ -38,7 +38,7 @@ TEO is a customized redmine. This is a TEO deployment example for Openshift.
     $ oc adm policy add-scc-to-user anyuid -z default -n <i>project_name</i></pre>
 
 <blockquote>
-****     ANSIBLE ZONE   *****  <br />
+---------- ANSIBLE ZONE ----------  <br />
 <br />
 6. Prepare posgreSQL database with ansible. We tested it with a Minimal installation of CentOS 7.<br />
      Prior to launch the playbook:<br />
@@ -46,13 +46,12 @@ TEO is a customized redmine. This is a TEO deployment example for Openshift.
      &emsp;  - Allow access to postgreSQL host from Ansible:<br/>
      &emsp; <b> $ ssh-copy-id root@'<i>IP_postgreSQL_server</i>' </b> <br/>
    Then launch Ansible Playbook to install and configure PostgreSQL:<br />
-<b>$ wget https://raw.githubusercontent.com/jmnohales/teo/master/postgresql_playbook.yml</b><br/>
-<b>$ ansible-playbook postgresql_playbook.yml</b><br/>
+<pre>    $ wget https://raw.githubusercontent.com/jmnohales/teo/master/postgresql_playbook.yml
+    $ ansible-playbook postgresql_playbook.yml<pre>
 <br />
-To test postgresql database:<br />
-<b>$ psql -h <i>postgre_server_IP</i> -U redmine --list</b><br/>
-<br />
-**** END OF ANSIBLE ZONE ****<br/>
+To test postgresql database:
+<pre>$ psql -h <i>postgre_server_IP</i> -U redmine --list</pre>
+------ END OF ANSIBLE ZONE ------<br/>
 </blockquote>
 
 <i>&emsp; [.... Wait until image "teo" be ready at the registry before continue ...]</i>
