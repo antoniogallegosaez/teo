@@ -17,14 +17,7 @@ This is a TEO app (based in redmine) for deployment in Openshift demo.
 4.  <b>$ minishift start --username <Red_Hat_username>  --password <Red_Hat_password></b> <br />
 Starting local OpenShift cluster using 'kvm' hypervisor...<br />
 [...]<br />
--- Server Information ... <br />
-   OpenShift server started.<br />
-   The server is accessible via web console at:<br />
-       https://192.168.42.110:8443<br />
-   You are logged in as:<br />
-       User:     developer<br />
-       Password: developer<br />
-   To login as administrator:
+   To login as administrator:<br />
        oc login -u system:admin
 
 5.  Create a project called "teo"\
@@ -51,20 +44,19 @@ Password: <i>admin</i><br />
 <blockquote>
 ****     ANSIBLE ZONE   *****  <br />
 9. Prepare posgreSQL database with ansible (needs an ansible environment with an inventary called "bbdd"):<br/>
-<b>$ wget https://raw.githubusercontent.com/jmnohales/teo/master/postgresql_playbook.yml</b><br/>
-    Ensure /etc/ansible/hosts has the correct IP associated to "bbdd"<br/>
-    Allow access to host from Ansible:<br/>
+     We tested it with a Minimal installation of CentOS 7.<br />
+     Prior to launch the playbook:<br />
+       - Ensure /etc/ansible/hosts has the correct IP associated to "bbdd"<br/>
+       - Allow access to postgreSQL host from Ansible:<br/>
     <b> $ ssh-copy-id root@'<i>IP_postgreSQL_server</i>' </b> <br/>
+   Then launch Ansible Playbook to install and configure PostgreSQL:
+<b>$ wget https://raw.githubusercontent.com/jmnohales/teo/master/postgresql_playbook.yml</b><br/>
 <b>$ ansible-playbook postgresql_playbook.yml</b><br/>
 
 To test database:
 <b>$ su - postgres</b><br/>
 <b>$ psql -U redmine --list</b><br/>
 <b>$ psql -h 192.168.42.99 -U redmine redmine_production</b><br />
-
-SET:\
-host    all             all             all                     trust\
-at /var/lib/pgsql/data/pg_hba.conf\
 
 **** END OF ANSIBLE ZONE ****<br/>
 </blockquote>
