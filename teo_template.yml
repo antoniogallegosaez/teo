@@ -123,3 +123,15 @@ parameters:
 - description: Name of the instance
   name: NAME
   value: teo
+- description: Service, Hostname or PostgreSQL server IP address
+  name: DB_HOST
+  value: postgresteo
+- description: Database Name
+  name: DB_NAME
+  value: redmine_production
+- description: Database Username
+  name: DB_USER
+  value: redmine
+- description: Database Password
+  name: DB_PASS
+  value: password
