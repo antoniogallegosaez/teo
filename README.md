@@ -20,25 +20,24 @@ TEO is a customized redmine. This is a TEO deployment example for Openshift.
     To login as administrator:
         oc login -u system:admin </pre>
 
-2.  Create a project called "teo"\
+2.  Create a project called "teo"
 <pre>    $ oc login -u admin
     Password: <i>admin</i>
     $ oc new-project teo</pre>
 
-3.  Build teo image from GitHub:<br />
+3.  Build teo image from GitHub:
 <pre> $ oc new-build https://github.com/jmnohales/teo.git</pre>
 <i>(optional) At this stage it is possible to monitor the build process from GUI.
 
 4.  Import TEO app tempate:<br />
-<b> $ oc create -f https://raw.githubusercontent.com/jmnohales/teo/master/teo_template.yml</b><br />
+<pre> $ oc create -f https://raw.githubusercontent.com/jmnohales/teo/master/teo_template.yml</pre>
 
 
 5.  Change teo project privileges to be able to run containers as root:<br />
-<b>$ oc login -u system:admin</b><br />
-<b>$ oc project teo</b><br />
-<b>$ oc adm policy add-scc-to-user anyuid -z default</b><br />
+<pre>    $ oc login -u system:admin
+    $ oc adm policy add-scc-to-user anyuid -z default -n <i>project_name</i></pre>
 
-<i>[.... Wait until image "teo" be ready at the registry ...]</i>
+<i>&emsp; [.... Wait until image "teo" be ready at the registry ...]</i>
 
 <blockquote>
 ****     ANSIBLE ZONE   *****  <br />
