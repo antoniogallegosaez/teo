@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Template
 metadata:
-  name: teo_app
+  name: teo-app
 objects:
 - apiVersion: v1
   kind: DeploymentConfig
