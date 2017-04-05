@@ -41,6 +41,9 @@ Password: <i>admin</i><br />
 6.  Build teo image from GitHub:<br />
 <b> $ oc new-build https://github.com/jmnohales/teo.git</b><br />
 
+6b. (optional) It is possible to monitor the process from GUI
+<b> $ minishift console</b><br />
+
 7.  Change teo project privileges to be able to run containers as root:<br />
 <b>$ oc login -u system:admin</b><br />
 <b>$ oc adm policy add-scc-to-user anyuid -z default -n teo</b><br />
