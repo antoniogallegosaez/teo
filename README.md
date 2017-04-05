@@ -52,8 +52,8 @@ Password: <i>admin</i><br />
    Then launch Ansible Playbook to install and configure PostgreSQL:<br />
 <b>$ wget https://raw.githubusercontent.com/jmnohales/teo/master/postgresql_playbook.yml</b><br/>
 <b>$ ansible-playbook postgresql_playbook.yml</b><br/>
-
-To test database:
+<br />
+To test database:<br />
 <b>$ su - postgres</b><br/>
 <b>$ psql -U redmine --list</b><br/>
 <b>$ psql -h 192.168.42.99 -U redmine redmine_production</b><br />
