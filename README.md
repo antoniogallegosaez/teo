@@ -56,7 +56,7 @@ Password: <i>admin</i><br />
 To test database:
 <b>$ su - postgres</b><br/>
 <b>$ psql -U redmine --list</b><br/>
-
+<b>$ psql -h 192.168.42.99 -U redmine redmine_production</b><br />
 **** END OF ANSIBLE ZONE ****<br/>
 </blockquote>
 
