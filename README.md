@@ -7,17 +7,17 @@ TEO is a customized redmine. This is a TEO deployment example for Openshift.
 1.  Download & configure Openshift minishift CDK (https://developers.redhat.com/products/cdk/download/)
 
 <pre>    $ wget https://developers.redhat.com/download-manager/file/cdk-3.0.beta-minishift-linux-amd64
-    # mv cdk-3.0.beta-minishift-linux-amd64 /bin/minishift\
-    $ minishift setup-cdk\
-    [...]\
-    CDK 3 setup complete.</pre>
-
-
-2.  <pre> $ minishift start --username <Red_Hat_username>  --password <Red_Hat_password> </pre> 
-Starting local OpenShift cluster using 'kvm' hypervisor...<br />
-[...]<br />
-   To login as administrator:<br />
-       oc login -u system:admin
+    # mv cdk-3.0.beta-minishift-linux-amd64 /bin/minishift
+    
+    $ minishift setup-cdk
+    [...]
+    CDK 3 setup complete.
+    
+    $ minishift start --username <Red_Hat_username>  --password <Red_Hat_password> 
+    Starting local OpenShift cluster using 'kvm' hypervisor...
+    [...]
+    To login as administrator:
+    oc login -u system:admin </pre>
 
 5.  Create a project called "teo"\
 <b>$ oc login -u admin</b><br />
