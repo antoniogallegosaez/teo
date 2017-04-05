@@ -21,14 +21,13 @@ TEO is a customized redmine. This is a TEO deployment example for Openshift.
         oc login -u system:admin </pre>
 
 2.  Create a project called "teo"\
-<b>$ oc login -u admin</b><br />
-Password: <i>admin</i><br />
-<b>$ oc new-project teo</b>
+<pre>    $ oc login -u admin
+    Password: <i>admin</i>
+    $ oc new-project teo</pre>
 
 3.  Build teo image from GitHub:<br />
-<b> $ oc new-build https://github.com/jmnohales/teo.git</b><br />
-    <i>(optional) It is possible to monitor the process from GUI\
-    <b> $ minishift console</b></i><br /> 
+<pre> $ oc new-build https://github.com/jmnohales/teo.git</pre>
+<i>(optional) At this stage it is possible to monitor the build process from GUI.
 
 4.  Import TEO app tempate:<br />
 <b> $ oc create -f https://raw.githubusercontent.com/jmnohales/teo/master/teo_template.yml</b><br />
