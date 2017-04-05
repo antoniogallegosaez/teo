@@ -39,7 +39,6 @@ TEO is a customized redmine. This is a TEO deployment example for Openshift.
 
 <blockquote>
 ---------- ANSIBLE ZONE ----------  <br />
-<br />
 6. Prepare posgreSQL database with ansible. We tested it with a Minimal installation of CentOS 7.<br />
      Prior to launch the playbook:<br />
      &emsp;  - Ensure /etc/ansible/hosts has the correct IP associated to "bbdd"<br/>
