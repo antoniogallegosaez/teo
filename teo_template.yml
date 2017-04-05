@@ -60,6 +60,16 @@ objects:
             name: teo-1
           - mountPath: /var/log/redmine
             name: teo-2
+          readinessProbe:
+           httpGet:
+              path: /
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: 120
+            timeoutSeconds: 300
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         securityContext: {}
