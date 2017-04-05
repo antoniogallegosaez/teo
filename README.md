@@ -56,7 +56,7 @@ Password: <i>admin</i><br />
 <b>$ wget https://raw.githubusercontent.com/jmnohales/teo/master/postgresql_playbook.yml</b><br/>
     Ensure /etc/ansible/hosts has the correct IP associated to "bbdd"<br/>
     Allow access to host from Ansible:<br/>
-    <b> $ ssh-copy-id root@'<IP_postgreSQL_server>' </b> <br/>
+    <b> $ ssh-copy-id root@'<i>IP_postgreSQL_server</i>' </b> <br/>
 <b>$ ansible-playbook postgresql_playbook.yml</b><br/>
 
 To test database:
