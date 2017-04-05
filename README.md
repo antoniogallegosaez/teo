@@ -43,6 +43,7 @@ Password: <i>admin</i><br />
 
 <blockquote>
 ****     ANSIBLE ZONE   *****  <br />
+<br />
 9. Prepare posgreSQL database with ansible (needs an ansible environment with an inventary called "bbdd"):<br/>
      We tested it with a Minimal installation of CentOS 7.<br />
      Prior to launch the playbook:<br />
@@ -57,7 +58,7 @@ To test database:<br />
 <b>$ su - postgres</b><br/>
 <b>$ psql -U redmine --list</b><br/>
 <b>$ psql -h 192.168.42.99 -U redmine redmine_production</b><br />
-
+<br />
 **** END OF ANSIBLE ZONE ****<br/>
 </blockquote>
 
