@@ -113,7 +113,6 @@ objects:
       app: ${NAME}
     name: ${NAME}
   spec:
-    host: ${APPLICATION_DOMAIN}.${defaultSubdomain}
     port:
       targetPort: 80-tcp
     to:
