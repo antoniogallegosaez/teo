@@ -16,12 +16,6 @@ This is a TEO app (based in redmine) for deployment in Openshift demo.
 
 4.  <b>$ minishift start --username <Red_Hat_username>  --password <Red_Hat_password></b> <br />
 Starting local OpenShift cluster using 'kvm' hypervisor...<br />
-Registering machine using subscription-manager<br />
-Provisioning OpenShift via '/home/jmn/.minishift/cache/oc/v3.4.1.2/oc [cluster up --use-existing-config --host-config-dir /var/lib/minishift/openshift.local.config --host-data-dir /var/lib/minishift/hostdata --host-volumes-dir /var/lib/minishift/openshift.local.volumes]'<br />
--- Checking OpenShift client ... OK<br />
--- Checking Docker client ... OK<br />
--- Checking Docker version ... OK<br />
--- Checking for existing OpenShift container ... OK<br />
 [...]<br />
 -- Server Information ... <br />
    OpenShift server started.<br />
