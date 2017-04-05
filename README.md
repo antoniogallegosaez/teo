@@ -43,7 +43,11 @@ Password: <i>admin</i><br />
     <i>(optional) It is possible to monitor the process from GUI\
     <b> $ minishift console</b></i><br /> 
 
-7.  Change teo project privileges to be able to run containers as root:<br />
+7.  Build teo image from GitHub:<br />
+<b> $ oc new-build https://github.com/jmnohales/teo.git</b><br />
+
+
+8.  Change teo project privileges to be able to run containers as root:<br />
 <b>$ oc login -u system:admin</b><br />
 <b>$ oc project teo</b><br />
 <b>$ oc adm policy add-scc-to-user anyuid -z default</b><br />
@@ -52,7 +56,7 @@ Password: <i>admin</i><br />
 
 <blockquote>
 ****     ANSIBLE ZONE   *****  <br />
-8. Prepare posgreSQL database with ansible (needs an ansible environment with an inventary called "bbdd"):<br/>
+9. Prepare posgreSQL database with ansible (needs an ansible environment with an inventary called "bbdd"):<br/>
 <b>$ wget https://raw.githubusercontent.com/jmnohales/teo/master/postgresql_playbook.yml</b><br/>
     Ensure /etc/ansible/hosts has the correct IP associated to "bbdd"<br/>
     Allow access to host from Ansible:<br/>
@@ -74,15 +78,11 @@ at /var/lib/pgsql/data/pg_hba.conf\
 9.  Open the GUI \
 <b>$ minishift console</b>
 
-10. Launch a teo instance from the GUI:
+10. Launch a teo template instance from the GUI:
       - Select Project "teo"
       - Select "Add to project in the middle of the menu bar"
-      - Select Tab "Deploy Image"
-      - Image Stream Tag:
-          teo / teo / latest
-      - Set the following variables:\
-          DB_TYPE = postgres \
-          DB_ADAPTER = postgresql \
+      - Look for "template-teo"
+      - Fill the data for DB connection. For example:\
           DB_HOST = <posgreSQL_server_IP> \
           DB_NAME = redmine_production \
           DB_USER = redmine \
