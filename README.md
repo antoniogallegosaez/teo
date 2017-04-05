@@ -2,7 +2,7 @@
 
 TEO is a customized redmine. This is a TEO deployment example for Openshift.
 
-<font color="gray"> <i>Note: Steps 1 to 4 creates the Openshift demo environment, if you already have an operational Openshift environment, you can start from the step 5.</i> </font>
+<font color="#CCCCCC"> <i>Note: Steps 1 to 4 creates the Openshift demo environment, if you already have an operational Openshift environment, you can start from the step 5.</i> </font>
 
 1.  Download Openshift minishift cdk from: https://developers.redhat.com/products/cdk/download/
 
