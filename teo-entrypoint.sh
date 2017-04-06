@@ -1,33 +1,33 @@
 #!/bin/bash
 if [ ! -d "${REDMINE_DATA_DIR}/tmp/" ]; then
   echo "INSTALANDO redmine POR PRIMERA VEZ------"
-  /sbin/entrypoint.sh 'echo "Instalando redmine de base"'
+  sudo /sbin/entrypoint.sh 'echo "Instalando redmine de base"'
   echo "INSTALACIÓN INICIAL FINALIZADA------"
 fi
 if [ ! -d "${REDMINE_DATA_DIR}/plugins/" ]; then
   echo "Preparando plugins y temas de TEO..."
-  mv ${REDMINE_INSTALL_DIR}/teo-plugins ${REDMINE_DATA_DIR}/plugins
-  cp -r ${REDMINE_INSTALL_DIR}/public/themes ${REDMINE_DATA_DIR}
+  sudo mv ${REDMINE_INSTALL_DIR}/teo-plugins ${REDMINE_DATA_DIR}/plugins
+  sudo cp -r ${REDMINE_INSTALL_DIR}/public/themes ${REDMINE_DATA_DIR}
   if [ -d ${REDMINE_DATA_DIR}/plugins/redmine_omniauth_saml ]; then
-    /sbin/entrypoint.sh 'echo "Instalando plugins antes de configurar SAML"'
-    mv ${REDMINE_HOME}/teo-config/initializers/saml.rb ${REDMINE_INSTALL_DIR}/config/initializers/saml.rb
+    sudo /sbin/entrypoint.sh 'echo "Instalando plugins antes de configurar SAML"'
+    sudo mv ${REDMINE_HOME}/teo-config/initializers/saml.rb ${REDMINE_INSTALL_DIR}/config/initializers/saml.rb
   fi
 fi;
-service ssh start
+sudo service ssh start
 if [ -e "${REDMINE_INSTALL_DIR}/config/environments/production.rb.orig" ]; then
-  cp "${REDMINE_INSTALL_DIR}/config/environments/production.rb.orig" "${REDMINE_INSTALL_DIR}/config/environments/production.rb"
+  sudo cp "${REDMINE_INSTALL_DIR}/config/environments/production.rb.orig" "${REDMINE_INSTALL_DIR}/config/environments/production.rb"
 fi
 if [ "$TEO_ENV" = "development" ]; then
   echo "Linking to data-dir plugins"
   if [ -d "${REDMINE_DATA_DIR}/plugins/" ]; then
-    mv "${REDMINE_INSTALL_DIR}/plugins/" "${REDMINE_INSTALL_DIR}/plugins-orig/"
-    ln -s "${REDMINE_DATA_DIR}/plugins/" "${REDMINE_INSTALL_DIR}"
+    sudo mv "${REDMINE_INSTALL_DIR}/plugins/" "${REDMINE_INSTALL_DIR}/plugins-orig/"
+    sudo ln -s "${REDMINE_DATA_DIR}/plugins/" "${REDMINE_INSTALL_DIR}"
   fi
   echo "Disabling caches"
   if [ ! -e "${REDMINE_INSTALL_DIR}/config/environments/production.rb.orig" ]; then
-    cp "${REDMINE_INSTALL_DIR}/config/environments/production.rb" "${REDMINE_INSTALL_DIR}/config/environments/production.rb.orig"
+    sudo cp "${REDMINE_INSTALL_DIR}/config/environments/production.rb" "${REDMINE_INSTALL_DIR}/config/environments/production.rb.orig"
   fi
-  cp "${REDMINE_INSTALL_DIR}/config/environments/development.rb" "${REDMINE_INSTALL_DIR}/config/environments/production.rb"
+  sudo cp "${REDMINE_INSTALL_DIR}/config/environments/development.rb" "${REDMINE_INSTALL_DIR}/config/environments/production.rb"
   echo "--- Activating DEBUG log level ---"
   echo "config.log_level = :debug" >> ${REDMINE_INSTALL_DIR}/config/additional_environment.rb
   mkdir -p log
@@ -38,4 +38,4 @@ fi
 sed '/ui_theme:/{n;s/.*/  default: teo_a1_theme/}' /home/redmine/redmine/config/settings.yml > /home/redmine/redmine/config/settings.yml.aux
 cat /home/redmine/redmine/config/settings.yml.aux > /home/redmine/redmine/config/settings.yml
 
-/sbin/entrypoint.sh "$@"
+sudo /sbin/entrypoint.sh "$@"
