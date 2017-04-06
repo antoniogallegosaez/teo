@@ -35,6 +35,7 @@ VOLUME ["${REDMINE_DATA_DIR}", "${REDMINE_LOG_DIR}"]
 COPY teo-entrypoint.sh /sbin/teo-entrypoint.sh
 RUN chmod 755 /sbin/teo-entrypoint.sh
 WORKDIR ${REDMINE_INSTALL_DIR}
+USER root
 ENTRYPOINT ["/sbin/teo-entrypoint.sh"]
 CMD ["app:start"]
 
