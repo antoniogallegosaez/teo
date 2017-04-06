@@ -1,7 +1,7 @@
 #!/bin/bash
 if [ ! -d "${REDMINE_DATA_DIR}/tmp/" ]; then
   echo "INSTALANDO redmine POR PRIMERA VEZ------"
-  sudo /sbin/entrypoint.sh 'echo "Instalando redmine de base"'
+  /sbin/entrypoint.sh 'echo "Instalando redmine de base"'
   echo "INSTALACIÓN INICIAL FINALIZADA------"
 fi
 if [ ! -d "${REDMINE_DATA_DIR}/plugins/" ]; then
