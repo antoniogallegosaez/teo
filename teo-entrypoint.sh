@@ -6,11 +6,11 @@ if [ ! -d "${REDMINE_DATA_DIR}/tmp/" ]; then
 fi
 if [ ! -d "${REDMINE_DATA_DIR}/plugins/" ]; then
   echo "Preparando plugins y temas de TEO..."
-  mv ${REDMINE_INSTALL_DIR}/teo-plugins ${REDMINE_DATA_DIR}/plugins
+  cp ${REDMINE_INSTALL_DIR}/teo-plugins ${REDMINE_DATA_DIR}/plugins
   cp -r ${REDMINE_INSTALL_DIR}/public/themes ${REDMINE_DATA_DIR}
   if [ -d ${REDMINE_DATA_DIR}/plugins/redmine_omniauth_saml ]; then
     /sbin/entrypoint.sh 'echo "Instalando plugins antes de configurar SAML"'
-    mv ${REDMINE_HOME}/teo-config/initializers/saml.rb ${REDMINE_INSTALL_DIR}/config/initializers/saml.rb
+    cp ${REDMINE_HOME}/teo-config/initializers/saml.rb ${REDMINE_INSTALL_DIR}/config/initializers/saml.rb
   fi
 fi;
 service ssh start
@@ -20,7 +20,7 @@ fi
 if [ "$TEO_ENV" = "development" ]; then
   echo "Linking to data-dir plugins"
   if [ -d "${REDMINE_DATA_DIR}/plugins/" ]; then
-    mv "${REDMINE_INSTALL_DIR}/plugins/" "${REDMINE_INSTALL_DIR}/plugins-orig/"
+    cp "${REDMINE_INSTALL_DIR}/plugins/" "${REDMINE_INSTALL_DIR}/plugins-orig/"
     ln -s "${REDMINE_DATA_DIR}/plugins/" "${REDMINE_INSTALL_DIR}"
   fi
   echo "Disabling caches"
