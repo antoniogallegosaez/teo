@@ -1,0 +1,179 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: template-teo-full
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    labels:
+      app: ${NAME}
+    name: ${NAME}
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      app: ${NAME}
+    name: ${NAME}
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: ${NAME}:latest
+    runPolicy: Serial
+    source:
+      git:
+        uri: ${SOURCE_REPOSITORY_URL}
+      type: Git
+    strategy:
+      type: Docker
+    triggers:
+    - type: ConfigChange
+    - imageChange: {}
+      type: ImageChange
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      app: ${NAME}
+    name: ${NAME}
+  spec:
+    replicas: 1
+    selector:
+      app: ${NAME}
+      deploymentconfig: ${NAME}
+    strategy:
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        labels:
+          app: ${NAME}
+          deploymentconfig: ${NAME}
+      spec:
+        containers:
+        - env:
+          - name: DB_TYPE
+            value: postgres
+          - name: DB_ADAPTER
+            value: postgresql
+          - name: DB_HOST
+            value: ${DB_HOST}
+          - name: DB_NAME
+            value: ${DB_NAME}
+          - name: DB_USER
+            value: ${DB_USER}
+          - name: DB_PASS
+            value: ${DB_PASS}
+          image: teo/teo
+          imagePullPolicy: Always
+          name: ${NAME}
+          ports:
+          - containerPort: 22
+            protocol: TCP
+          - containerPort: 80
+            protocol: TCP
+          - containerPort: 443
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          volumeMounts:
+          - mountPath: /home/redmine/data
+            name: teo-1
+          - mountPath: /var/log/redmine
+            name: teo-2
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: 120
+            timeoutSeconds: 300
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: teo-1
+        - emptyDir: {}
+          name: teo-2
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - ${NAME}
+        from:
+          kind: ImageStreamTag
+          name: teo:latest
+          namespace: teo
+      type: ImageChange
+  status: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: ${NAME}
+    name: ${NAME}
+  spec:
+    ports:
+    - name: 22-tcp
+      port: 22
+      protocol: TCP
+      targetPort: 22
+    - name: 80-tcp
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    - name: 443-tcp
+      port: 443
+      protocol: TCP
+      targetPort: 443
+    selector:
+      deploymentconfig: ${NAME}
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Route
+  metadata:
+    labels:
+      app: ${NAME}
+    name: ${NAME}
+  spec:
+    port:
+      targetPort: 80-tcp
+    to:
+      kind: Service
+      name: ${NAME}
+parameters:
+- description: Name of the instance
+  name: NAME
+  value: teo
+- description: The URL of the repository with your application source code.
+  displayName: Git Repository URL
+  name: SOURCE_REPOSITORY_URL
+  required: true
+  value: https://github.com/jmnohales/teo.git
+- description: Service, Hostname or PostgreSQL server IP address
+  name: DB_HOST
+  value: 172.30.122.67
+- description: Database Name
+  name: DB_NAME
+  value: redmine_production
+- description: Database Username
+  name: DB_USER
+  value: redmine
+- description: Database Password
+  name: DB_PASS
+  value: password
