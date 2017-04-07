@@ -1,4 +1,4 @@
-# Demo TEO
+# Demo TEO versión Docker
 
 TEO is a customized redmine. This is a TEO deployment example for Openshift.
 
