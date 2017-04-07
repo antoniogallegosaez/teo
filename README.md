@@ -2,6 +2,7 @@
 
 TEO is a customized redmine. This is a TEO deployment example for Openshift.
 
+
 <blockquote> <i>Note: step 1 prepares an Openshift demo environment, if you already have an operational Openshift environment, you can start from step 2.</i> </blockquote>
 
 1.  Prepare Openshift environment. <br />
